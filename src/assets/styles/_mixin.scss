@@ -1,0 +1,22 @@
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin dropShadow {
+  mix-blend-mode: normal;
+  box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+}
+
+@mixin flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin wallpaper($wpUrl) {
+  background-image: url($wpUrl);
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+}

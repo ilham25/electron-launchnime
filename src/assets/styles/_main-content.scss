@@ -1,0 +1,106 @@
+.main-content {
+  flex-basis: 70%;
+  height: 100%;
+  width: 100%;
+  //   background-color: aquamarine;
+  position: relative;
+  .home-content {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 1;
+    transition: all 0.25s ease;
+
+    .home-content-thumbnail {
+      width: 95%;
+      height: 100%;
+      // background-color: yellow;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      @include dropShadow();
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1.1);
+        transition: all 0.25s ease-in;
+      }
+      &:hover {
+        img {
+          transform: scale(1.3);
+        }
+        .home-content-overlay {
+          background-color: rgba($color: #000000, $alpha: 0.5);
+        }
+      }
+      .home-content-overlay {
+        height: 100%;
+        width: 100%;
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        position: absolute;
+        top: 0;
+
+        flex-direction: column;
+        justify-content: flex-end;
+        background-color: rgba($color: #000000, $alpha: 0.8);
+        transition: all 0.4s ease;
+        //   position: absolute;
+        h1 {
+          color: white;
+          font-weight: 600;
+        }
+        h2 {
+          color: $primaryColor;
+          font-weight: 600;
+        }
+      }
+    }
+    .home-content-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      .home-content-capsule {
+        width: 250px;
+        height: 50px;
+        background-color: $primaryColor;
+        border-radius: 500px;
+        margin-top: 10px;
+        @include flexCenter();
+        @include dropShadow();
+        h2 {
+          color: white;
+          font-weight: 600;
+          cursor: default;
+        }
+      }
+    }
+  }
+  .list-content {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+  }
+  .history-content {
+    width: 100%;
+    height: 100%;
+    // background-color: red;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+  }
+}

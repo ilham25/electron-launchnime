@@ -1,0 +1,67 @@
+.header-content {
+  flex-basis: 15%;
+  display: flex;
+  justify-content: space-between;
+  .capsule {
+    width: 275px;
+    height: 70px;
+    border-radius: 1000px;
+    background-color: $accentColor;
+    @include dropShadow();
+    @include flexCenter();
+    h1 {
+      font-style: italic;
+      color: $secondaryColor;
+      cursor: default;
+      span {
+        color: $primaryColor;
+      }
+    }
+    .collapse-btn {
+      fill: $secondaryColor;
+      cursor: pointer;
+      transform: rotate(180deg);
+    }
+    .header-btn {
+      width: 32px;
+      height: 32px;
+      margin: 0 5px 0 5px;
+      background-color: $minAccentColor;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      @include flexCenter();
+      svg {
+        display: none;
+        fill: white;
+        padding: 3px;
+      }
+      &:hover {
+        background-color: $primaryColor;
+        svg {
+          display: block;
+        }
+      }
+    }
+  }
+  .header-action-btn {
+    .capsule {
+      width: 180px;
+      height: 70px;
+    }
+
+    .btn-close,
+    .btn-settings {
+      // background-color: $primaryColor;
+      svg {
+        display: block;
+        fill: $secondaryColor;
+      }
+      &:hover {
+        svg {
+          fill: white;
+        }
+      }
+    }
+  }
+}

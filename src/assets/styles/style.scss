@@ -1,0 +1,48 @@
+// Import local font Montserrat
+@import url("../fonts/stylesheet.css");
+
+// import variables and mixin
+@import "./variables";
+@import "./mixin";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+.content {
+  width: 100vw;
+  height: 100vh;
+  // background-color: $minAccentColor;
+  @include flexCenter();
+  @include wallpaper("../img/wp.jpg");
+  transition: all 0.5s ease;
+}
+
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background-color: white;
+  opacity: 0.3;
+}
+
+.container {
+  height: 90%;
+  width: 90%;
+  @include flexColumn();
+  position: absolute;
+}
+// Import components
+@import "./header-content";
+
+@import "./main-content";
+
+@import "./dock-content";
+
+@import "./settings-modal";

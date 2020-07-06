@@ -1,0 +1,39 @@
+.dock-content {
+  flex-basis: 15%;
+  height: 100%;
+  width: 100%;
+  // background-color: teal;
+  @include flexCenter();
+  .dock-container {
+    height: 100%;
+    width: 25%;
+    // background-color: tomato;
+    @include flexCenter();
+    justify-content: space-around;
+    .dock-btn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: $accentColor;
+      @include dropShadow();
+      cursor: pointer;
+      @include flexCenter();
+      &:hover {
+        background-color: $minAccentColor;
+      }
+      svg {
+        fill: $secondaryColor;
+      }
+      transition: all 0.25s ease;
+      &.active {
+        background-color: $primaryColor;
+        svg {
+          fill: white;
+        }
+        &:hover {
+          background-color: #4086d9;
+        }
+      }
+    }
+  }
+}
