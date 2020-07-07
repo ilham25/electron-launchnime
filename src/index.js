@@ -19,7 +19,7 @@ const createWindow = () => {
     },
     frame: false,
   });
-  // mainWindow.setFullScreen(true);
+  mainWindow.setFullScreen(true);
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));

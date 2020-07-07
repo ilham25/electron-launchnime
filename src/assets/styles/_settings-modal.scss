@@ -53,6 +53,24 @@
             background-color: $minAccentColor;
           }
         }
+        .settings-wp-default {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: $accentColor;
+          @include dropShadow();
+          padding: 10px 30px;
+          border-radius: 500px;
+          margin-left: 20px;
+          svg {
+            fill: $primaryColor;
+            margin-right: 10px;
+          }
+          cursor: pointer;
+          &:hover {
+            background-color: $minAccentColor;
+          }
+        }
       }
     }
   }

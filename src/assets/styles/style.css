@@ -1,4 +1,46 @@
 @import url("../fonts/stylesheet.css");
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-button {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.7);
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0);
+  border: 0px none #ffffff;
+  border-radius: 14px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: rgba(255, 255, 255, 0);
+}
+
+::-webkit-scrollbar-track:active {
+  background: rgba(255, 255, 255, 0);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -29,16 +71,17 @@ body {
   background-repeat: no-repeat;
   /* Do not repeat the image */
   background-size: cover;
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .overlay {
   width: 100vw;
   height: 100vh;
   position: absolute;
-  background-color: white;
-  opacity: 0.3;
+  background-color: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
 }
 
 .container {
@@ -69,6 +112,8 @@ body {
   width: 275px;
   height: 70px;
   border-radius: 1000px;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
   background-color: #efefef;
   mix-blend-mode: normal;
   -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
@@ -287,13 +332,156 @@ body {
 .main-content .list-content {
   width: 100%;
   height: 100%;
-  background-color: white;
   position: absolute;
   top: 0;
   opacity: 0;
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
   pointer-events: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.main-content .list-content .list-container {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 100%;
+  width: 100%;
+  margin-right: 15px;
+  background-color: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+  border-radius: 10px;
+  padding: 20px;
+  overflow: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.main-content .list-content .list-container .ani-container {
+  height: 100%;
+  width: 100%;
+}
+
+.main-content .list-content .list-container .ani-container .anime-list-container {
+  height: 15%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  background-color: #efefef;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 0 20px;
+  cursor: pointer;
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+}
+
+.main-content .list-content .list-container .ani-container .anime-list-container p {
+  font-weight: 600;
+  color: #646464;
+}
+
+.main-content .list-content .list-container .ani-container .anime-list-container small {
+  color: #4d94ff;
+}
+
+.main-content .list-content .list-container .anime-input-btn {
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  background-color: #cccccc;
+}
+
+.main-content .list-content .list-content-thumbnail {
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+  height: 100%;
+  width: 100%;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.main-content .list-content .list-content-thumbnail img {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 10px;
+  -webkit-transition: all 0.25s ease-in;
+  transition: all 0.25s ease-in;
+}
+
+.main-content .list-content .list-content-thumbnail:hover img {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+
+.main-content .list-content .list-content-thumbnail .list-content-thumbnail-overlay {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.main-content .list-content .list-content-thumbnail .list-content-thumbnail-overlay h1 {
+  color: white;
+  font-weight: 500;
+}
+
+.main-content .list-content .list-content-thumbnail .list-content-thumbnail-overlay h3 {
+  color: #4d94ff;
+  font-weight: 500;
+}
+
+.main-content .list-content .list-content-thumbnail .list-content-thumbnail-overlay .overlay-description {
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  border-radius: 0 0 10px 10px;
 }
 
 .main-content .history-content {
@@ -475,6 +663,35 @@ body {
 }
 
 .settings-modal .settings-dialog .settings-dialog-container .settings-wp .settings-wp-browse:hover {
+  background-color: #cccccc;
+}
+
+.settings-modal .settings-dialog .settings-dialog-container .settings-wp .settings-wp-default {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #efefef;
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+  padding: 10px 30px;
+  border-radius: 500px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.settings-modal .settings-dialog .settings-dialog-container .settings-wp .settings-wp-default svg {
+  fill: #4d94ff;
+  margin-right: 10px;
+}
+
+.settings-modal .settings-dialog .settings-dialog-container .settings-wp .settings-wp-default:hover {
   background-color: #cccccc;
 }
 

@@ -29,7 +29,14 @@ const lastWatched = document.querySelector(".last-watched");
 const lastAdded = document.querySelector(".last-added");
 
 // List Content
-const animeLists = document.querySelectorAll(".anime-list");
+const listWpContainer = document.querySelector(".list-content-thumbnail");
+const listWpThumbnail = document.querySelector(".list-content-thumbnail img");
+const listWpTitle = document.querySelector(
+  ".list-content-thumbnail .list-content-thumbnail-overlay .overlay-description h1"
+);
+const listWpEpisode = document.querySelector(
+  ".list-content-thumbnail .list-content-thumbnail-overlay .overlay-description h3"
+);
 
 // Dock action button
 
@@ -40,6 +47,7 @@ const btnHistory = document.querySelector(".btn-history");
 // Settings
 const settingsModal = document.querySelector(".settings-modal");
 const wpChangeBtn = document.querySelector(".settings-wp-browse");
+const wpDefault = document.querySelector(".settings-wp-default");
 // Component
 
 const wpContainer = document.querySelector(".content");
@@ -51,36 +59,36 @@ const wpContainer = document.querySelector(".content");
 const appData = {
   animeData: [
     {
-      title: "aowkoawk1",
-      directory: "dir1",
-      thumbnail: "thumb1",
+      title: "Plastic Memories",
+      directory: "",
+      thumbnail: `E:\\Ilham\\Wallpapers\\SoGa.jpg`,
     },
     {
-      title: "aowkoawk2",
+      title: "Bungou Stray Dogs",
       directory: "dir2",
-      thumbnail: "thumb2",
+      thumbnail: `E:\\Ilham\\Wallpapers\\Noerulb-Nakajima-Atsushi.png`,
     },
     {
-      title: "aowkoawk3",
+      title: "Re Zero",
       directory: "dir3",
-      thumbnail: "thumb3",
+      thumbnail: `E:\\Ilham\\Wallpapers\\REM PC -CSMS.jpg`,
     },
     {
-      title: "aowkoawk4",
+      title: "Saenai Heroine no Sodatekata",
       directory: "dir4",
-      thumbnail: "thumb4",
+      thumbnail: `E:\\Ilham\\Wallpapers\\SAEKANO PC -CSMS.jpg`,
     },
     {
-      title: "aowkoawk5",
+      title: "Nisekoi",
       directory: "dir5",
-      thumbnail: "thumb5",
+      thumbnail: `E:\\Ilham\\Wallpapers\\TEAMCHITOGE PC.jpg`,
     },
     {
-      title: "aowkoawk6",
+      title: "Kyoukai no Kanata Movie : I'll be Here",
       directory: "dir6",
-      thumbnail: "thumb6",
+      thumbnail:
+        "E:\\Ilham\\Wallpapers\\[KORIGENGI-FAKHRI] Mirai - I'll Be Here.png",
     },
-    ,
   ],
   wallpaperData: "",
 };
@@ -96,20 +104,21 @@ const getAnimeDirectory = () => {
 
   folderPath.then((value) => {
     //   Get the selected directory
-    console.log("selectedDirectory : ", value.filePaths[0]);
-    dirData = value.filePaths[0];
+    console.log("selectedDirectory : ", fileUrl(value.filePaths[0]));
+    dirData = fileUrl(value.filePaths[0]);
 
     // Get all files from selected directory
-    // fs.readdir(value.filePaths[0], (err, files) => {
-    //   // files from selected directory in array
-    //   console.log(files);
+    fs.readdir(value.filePaths[0], (err, files) => {
+      console.log(value.filePaths[0]);
+      // files from selected directory in array
+      console.log(files);
 
-    //   // Loop the entire files array in selectedDirectory
+      // Loop the entire files array in selectedDirectory
 
-    //   //   files.forEach((file) => {
-    //   //     console.log(file);
-    //   //   });
-    // });
+      //   files.forEach((file) => {
+      //     console.log(file);
+      //   });
+    });
   });
 };
 
@@ -211,24 +220,30 @@ const pageRouter = (btnName) => {
   }
 };
 
-// Looping anime list DOM onClick
-const fetchAnimeList = () => {
-  animeLists.forEach((animeList) => {
-    animeList.addEventListener("click", () => {
-      const dataDirectory = animeList.getAttribute("data-directory");
-      console.log("fetchAnimeList loop : ", dataDirectory);
-    });
-  });
-};
-
 // Creating dynamic DOM
 const createAnimeList = () => {
-  const listContainer = document.querySelector(".list-container ul");
+  const listContainer = document.querySelector(".ani-container");
   appData.animeData.forEach((anime) => {
-    const domAnimeList = document.createElement("li");
+    const domAnimeList = document.createElement("div");
+    domAnimeList.classList.add("anime-list-container");
     domAnimeList.setAttribute("data-directory", anime.directory);
-    domAnimeList.innerText = anime.title;
+    // domAnimeList.innerText = anime.title;
     // domAnimeList.innerHTML = `<li class="" data-directory="${anime.directory}">mantap</li>`;
+    domAnimeList.innerHTML = `<p>${anime.title}</p><small>Directory : ${anime.directory}</small>`;
+    // Looping click event
+    domAnimeList.addEventListener("click", () => {
+      // console.log(domAnimeList.getAttribute("data-directory"));
+      // console.log(fileUrl(anime.thumbnail));
+      // console.log(listWpThumbnail);
+      // console.log(listWpTitle);
+      // console.log(listWpEpisode);
+      listWpContainer.style.opacity = 0;
+      setTimeout(() => {
+        listWpThumbnail.src = fileUrl(anime.thumbnail);
+        listWpTitle.innerText = anime.title;
+        listWpContainer.style.opacity = 1;
+      }, 300);
+    });
     listContainer.appendChild(domAnimeList);
     console.log("anime foreach loop : ", anime.directory);
   });
@@ -254,6 +269,10 @@ wpChangeBtn.addEventListener("click", () => {
   changeWallpaper();
   settingsModal.classList.toggle("active");
 });
+wpDefault.addEventListener("click", () => {
+  resetWp();
+});
+
 closeBtn.addEventListener("click", () => {
   console.log("close button");
   w.close();
@@ -270,7 +289,6 @@ minimizeBtn.addEventListener("click", () => {
 
 lastWatched.addEventListener("click", () => {
   console.log("last watched clicked!");
-  getAnimeDirectory();
 });
 
 lastAdded.addEventListener("click", () => {
@@ -290,6 +308,13 @@ btnHistory.addEventListener("click", () => {
   pageRouter("history");
 });
 
+// Key Event
+document.body.addEventListener("keydown", (e) => {
+  if (e.key == "Escape") {
+    settingsModal.classList.remove("active");
+  }
+});
+
 // Etc
 
 // Run startup function
@@ -298,7 +323,7 @@ wpCheck();
 // Debugging only
 
 // fetchAnimeList();
-// createAnimeList();
+createAnimeList();
 // fetchAnimeList();
 
 // Change Wallpaper Script

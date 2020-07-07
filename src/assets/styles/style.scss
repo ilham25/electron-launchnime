@@ -4,6 +4,11 @@
 // import variables and mixin
 @import "./variables";
 @import "./mixin";
+
+// Scrollbar
+@import "./custom-scrollbar";
+
+// Main Style
 * {
   margin: 0;
   padding: 0;
@@ -21,15 +26,17 @@ body {
   // background-color: $minAccentColor;
   @include flexCenter();
   @include wallpaper("../img/wp.jpg");
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 .overlay {
   width: 100vw;
   height: 100vh;
   position: absolute;
-  background-color: white;
-  opacity: 0.3;
+  // background-color: white;
+  // opacity: 0.3;
+  background-color: rgba($color: #000000, $alpha: 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .container {

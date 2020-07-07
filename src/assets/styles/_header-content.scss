@@ -6,6 +6,8 @@
     width: 275px;
     height: 70px;
     border-radius: 1000px;
+    // background-color: rgba($color: #fff, $alpha: 0.5);
+    backdrop-filter: blur(8px);
     background-color: $accentColor;
     @include dropShadow();
     @include flexCenter();
