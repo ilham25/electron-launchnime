@@ -1,0 +1,117 @@
+.input-anime-modal {
+  @include modalOverlay();
+  .input-anime-form {
+    height: 400px;
+    width: 600px;
+    background-color: rgba($color: $accentColor, $alpha: 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 30px;
+    .form-container {
+      height: 100%;
+      width: 100%;
+      // background-color: aqua;
+      display: flex;
+      flex-direction: column;
+      h1,
+      h3 {
+        font-weight: normal;
+      }
+      h1 span {
+        color: $primaryColor;
+      }
+      .frm-title {
+        flex-basis: 10%;
+        width: 100%;
+        height: 100%;
+        // background-color: darkgoldenrod;
+        display: flex;
+        // flex-direction: column;
+
+        margin: 15px 0;
+        // padding: 5px 0;
+        align-items: center;
+        p {
+          font-weight: 500;
+        }
+        input:focus {
+          outline-width: 0;
+        }
+        input {
+          width: 100%;
+          border: 0;
+          padding: 10px 30px;
+          border-radius: 500px;
+          margin-left: 20px;
+          // margin: 0 20px;
+          @include dropShadow();
+        }
+      }
+      .frm-directory {
+        flex-basis: 10%;
+        width: 100%;
+        height: 100%;
+        // background-color: blue;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        p {
+          font-weight: 500;
+        }
+      }
+      .frm-thumbnail {
+        flex-basis: 10%;
+        width: 100%;
+        height: 100%;
+        // background-color: brown;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        p {
+          font-weight: 500;
+        }
+      }
+      .frm-insert {
+        flex-basis: 70%;
+        width: 100%;
+        height: 100%;
+        // background-color: cadetblue;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+      }
+      .form-browse {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $accentColor;
+        @include dropShadow();
+        padding: 10px 30px;
+        border-radius: 500px;
+        margin-left: 20px;
+        // margin-bottom: 10px;
+        svg {
+          fill: $primaryColor;
+          margin-right: 10px;
+        }
+        p {
+          margin: 0;
+          font-weight: normal;
+        }
+        cursor: pointer;
+        &:hover {
+          background-color: $minAccentColor;
+        }
+      }
+      .anime-form-directory,
+      .anime-form-thumbnail {
+        color: $primaryColor;
+        margin-bottom: 15px;
+      }
+    }
+  }
+  &.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+}

@@ -105,28 +105,78 @@
           </div>
           <div class="list-content">
             <div class="list-container">
-              <div class="ani-container">
-                <!-- <div
-                  class="anime-list-container"
-                  data-directory="D:\nimu\plasmemo"
+              <div class="anime-container">
+                <div class="ani-container">
+                  <div
+                    class="anime-list-container"
+                    data-directory="D:\nimu\plasmemo"
+                    onclick="console.log('mantap gan')"
+                  >
+                    <div class="anime-title-container">
+                      <div class="title-child">
+                        <p>
+                          Plastic Memories
+                        </p>
+                        <small>
+                          Directory : D:\nimu\plasmemo
+                        </small>
+                      </div>
+                    </div>
+                    <!-- <div class="anime-delete-btn">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        width="24"
+                      >
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path
+                          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                        />
+                      </svg>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+              <div class="ani-input-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  width="32"
                 >
-                  <p>
-                    Plastic Memories
-                  </p>
-                  <small>
-                    Directory : D:\nimu\plasmemo
-                  </small>
-                </div> -->
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                  />
+                </svg>
+                <p>Insert your anime here</p>
               </div>
               <!-- <div class="anime-input-btn"></div> -->
             </div>
             <div class="list-content-thumbnail" title="Play">
-              <img src="./assets/img/thumb1.jpg" alt="" />
+              <img src="" alt="preview" />
               <div class="list-content-thumbnail-overlay">
                 <div class="overlay-description">
-                  <h1>Plastic Memories</h1>
-                  <h3>Total Episode : 13 Episodes</h3>
+                  <h1>-</h1>
+                  <h3>-</h3>
                 </div>
+              </div>
+            </div>
+            <div class="empty-anime-insert">
+              <div class="empty-anime-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  width="32"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                  />
+                </svg>
+                <p>Insert your anime here</p>
               </div>
             </div>
           </div>
@@ -214,6 +264,89 @@
               </div>
             </div>
             <div class="settings-opacity"></div>
+          </div>
+        </div>
+        <div class="delete-dialog" data-index="">
+          <div class="delete-message">
+            <p class="message">
+              Are you sure want to delete 'Plastic Memories'? aowkoakoawk
+            </p>
+          </div>
+          <div class="delete-confirm">
+            <div class="confirm-yes">
+              <p>Yes</p>
+            </div>
+            <div class="confirm-no">
+              <p>No</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-anime-modal">
+        <div class="input-anime-form">
+          <div class="form-container">
+            <h1>Insert <span>Anime</span></h1>
+            <div class="frm-title">
+              <p>Title</p>
+              <input
+                type="text"
+                class="anime-form-title"
+                maxlength="40"
+                required
+              />
+            </div>
+            <div class="frm-directory">
+              <p>Choose Directory</p>
+              <div class="form-browse form-directory">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  width="24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                  />
+                </svg>
+                <p>Browse</p>
+              </div>
+            </div>
+            <p class="anime-form-directory">-</p>
+            <div class="frm-thumbnail">
+              <p>Choose Thumbnail</p>
+              <div class="form-browse form-thumbnail">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  width="24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                  />
+                </svg>
+                <p>Browse</p>
+              </div>
+            </div>
+            <p class="anime-form-thumbnail">-</p>
+            <div class="frm-insert">
+              <div class="form-browse form-input-btn">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  width="24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                  />
+                </svg>
+                <p>Insert</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -14,6 +14,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  scroll-behavior: smooth;
+  user-select: none;
 }
 
 body {
@@ -53,3 +55,5 @@ body {
 @import "./dock-content";
 
 @import "./settings-modal";
+
+@import "./input-anime-modal";

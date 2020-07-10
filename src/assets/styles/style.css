@@ -47,6 +47,11 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  scroll-behavior: smooth;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 body {
@@ -223,7 +228,7 @@ body {
 
 .main-content .home-content .home-content-thumbnail {
   width: 95%;
-  height: 100%;
+  height: 380px;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
@@ -348,8 +353,21 @@ body {
       -ms-flex: 1;
           flex: 1;
   height: 100%;
-  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   margin-right: 15px;
+}
+
+.main-content .list-content .list-container .anime-container {
+  -ms-flex-preferred-size: 80%;
+      flex-basis: 80%;
+  height: 100%;
+  width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   -webkit-backdrop-filter: blur(20px);
           backdrop-filter: blur(20px);
@@ -358,6 +376,7 @@ body {
           box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
   border-radius: 10px;
   padding: 20px;
+  margin-bottom: 15px;
   overflow: auto;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -368,13 +387,14 @@ body {
           flex-direction: column;
 }
 
-.main-content .list-content .list-container .ani-container {
+.main-content .list-content .list-container .anime-container .ani-container {
   height: 100%;
   width: 100%;
 }
 
-.main-content .list-content .list-container .ani-container .anime-list-container {
-  height: 15%;
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container {
+  min-width: 0;
+  height: 20%;
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -382,37 +402,132 @@ body {
   margin-bottom: 15px;
   border-radius: 10px;
   background-color: #efefef;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  padding: 0 20px;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
   cursor: pointer;
   mix-blend-mode: normal;
   -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
           box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
 }
 
-.main-content .list-content .list-container .ani-container .anime-list-container p {
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container:hover {
+  background-color: #fcfcfc;
+}
+
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container:hover .anime-delete-btn {
+  opacity: 1;
+}
+
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container .anime-title-container {
+  min-width: 0;
+  -webkit-box-flex: 4;
+      -ms-flex: 4;
+          flex: 4;
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 0 20px;
+}
+
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container .anime-title-container p {
   font-weight: 600;
   color: #646464;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.main-content .list-content .list-container .ani-container .anime-list-container small {
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container .anime-title-container small {
   color: #4d94ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.main-content .list-content .list-container .anime-input-btn {
-  height: 64px;
-  width: 64px;
-  border-radius: 50%;
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container .anime-delete-btn {
+  opacity: 0;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 100%;
+  width: 100%;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container .anime-delete-btn svg {
+  fill: #646464;
+}
+
+.main-content .list-content .list-container .anime-container .ani-container .anime-list-container .anime-delete-btn:hover {
   background-color: #cccccc;
+}
+
+.main-content .list-content .list-container .ani-input-container {
+  -ms-flex-preferred-size: 20%;
+      flex-basis: 20%;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.main-content .list-content .list-container .ani-input-container svg {
+  fill: #4d94ff;
+}
+
+.main-content .list-content .list-container .ani-input-container:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+}
+
+.main-content .list-content .list-container .ani-input-container p {
+  font-weight: 500;
+  font-size: 1.2em;
 }
 
 .main-content .list-content .list-content-thumbnail {
@@ -482,6 +597,66 @@ body {
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
   border-radius: 0 0 10px 10px;
+}
+
+.main-content .list-content .empty-anime-insert {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.main-content .list-content .empty-anime-insert .empty-anime-container {
+  height: 100px;
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.main-content .list-content .empty-anime-insert .empty-anime-container svg {
+  fill: #4d94ff;
+}
+
+.main-content .list-content .empty-anime-insert .empty-anime-container:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+}
+
+.main-content .list-content .empty-anime-insert .empty-anime-container p {
+  font-weight: 500;
+  font-size: 1.2em;
 }
 
 .main-content .history-content {
@@ -592,6 +767,7 @@ body {
 }
 
 .settings-modal .settings-dialog {
+  opacity: 0;
   width: 600px;
   height: 600px;
   background-color: rgba(239, 239, 239, 0.8);
@@ -695,7 +871,300 @@ body {
   background-color: #cccccc;
 }
 
+.settings-modal .delete-dialog {
+  opacity: 0;
+  height: 150px;
+  width: 400px;
+  background-color: #cccccc;
+  position: absolute;
+  pointer-events: none;
+  border-radius: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.settings-modal .delete-dialog p {
+  font-weight: 500;
+}
+
+.settings-modal .delete-dialog .delete-message {
+  height: 100%;
+  width: 100%;
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+  color: #646464;
+  text-align: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-bottom: 1px solid #4d94ff;
+}
+
+.settings-modal .delete-dialog .delete-confirm {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.settings-modal .delete-dialog .delete-confirm .confirm-yes {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 100%;
+  width: 100%;
+  border-bottom-left-radius: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+.settings-modal .delete-dialog .delete-confirm .confirm-yes p {
+  color: #ff5858;
+}
+
+.settings-modal .delete-dialog .delete-confirm .confirm-yes:hover {
+  background-color: #bdbdbd;
+}
+
+.settings-modal .delete-dialog .delete-confirm .confirm-no {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 100%;
+  width: 100%;
+  border-bottom-right-radius: 10px;
+  border-left: 0.25px solid #4d94ff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+.settings-modal .delete-dialog .delete-confirm .confirm-no p {
+  color: #4d94ff;
+}
+
+.settings-modal .delete-dialog .delete-confirm .confirm-no:hover {
+  background-color: #bdbdbd;
+}
+
 .settings-modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.input-anime-modal {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  opacity: 0;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.input-anime-modal .input-anime-form {
+  height: 400px;
+  width: 600px;
+  background-color: rgba(239, 239, 239, 0.8);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.input-anime-modal .input-anime-form .form-container {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.input-anime-modal .input-anime-form .form-container h1,
+.input-anime-modal .input-anime-form .form-container h3 {
+  font-weight: normal;
+}
+
+.input-anime-modal .input-anime-form .form-container h1 span {
+  color: #4d94ff;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-title {
+  -ms-flex-preferred-size: 10%;
+      flex-basis: 10%;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 15px 0;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-title p {
+  font-weight: 500;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-title input:focus {
+  outline-width: 0;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-title input {
+  width: 100%;
+  border: 0;
+  padding: 10px 30px;
+  border-radius: 500px;
+  margin-left: 20px;
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-directory {
+  -ms-flex-preferred-size: 10%;
+      flex-basis: 10%;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-directory p {
+  font-weight: 500;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-thumbnail {
+  -ms-flex-preferred-size: 10%;
+      flex-basis: 10%;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-thumbnail p {
+  font-weight: 500;
+}
+
+.input-anime-modal .input-anime-form .form-container .frm-insert {
+  -ms-flex-preferred-size: 70%;
+      flex-basis: 70%;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.input-anime-modal .input-anime-form .form-container .form-browse {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #efefef;
+  mix-blend-mode: normal;
+  -webkit-box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+          box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.21);
+  padding: 10px 30px;
+  border-radius: 500px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.input-anime-modal .input-anime-form .form-container .form-browse svg {
+  fill: #4d94ff;
+  margin-right: 10px;
+}
+
+.input-anime-modal .input-anime-form .form-container .form-browse p {
+  margin: 0;
+  font-weight: normal;
+}
+
+.input-anime-modal .input-anime-form .form-container .form-browse:hover {
+  background-color: #cccccc;
+}
+
+.input-anime-modal .input-anime-form .form-container .anime-form-directory,
+.input-anime-modal .input-anime-form .form-container .anime-form-thumbnail {
+  color: #4d94ff;
+  margin-bottom: 15px;
+}
+
+.input-anime-modal.active {
   opacity: 1;
   pointer-events: all;
 }

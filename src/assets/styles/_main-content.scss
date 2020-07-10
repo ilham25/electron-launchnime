@@ -12,10 +12,9 @@
     align-items: center;
     opacity: 1;
     transition: all 0.25s ease;
-
     .home-content-thumbnail {
       width: 95%;
-      height: 100%;
+      height: 380px;
       // background-color: yellow;
       border-radius: 20px;
       overflow: hidden;
@@ -98,54 +97,125 @@
     .list-container {
       flex: 1;
       height: 100%;
-      width: 100%;
-      margin-right: 15px;
-      background-color: rgba($color: #fff, $alpha: 0.5);
-      backdrop-filter: blur(20px);
-      @include dropShadow();
-      border-radius: 10px;
-      padding: 20px;
-      overflow: auto;
+      // width: 100%;
       display: flex;
       flex-direction: column;
-      // position: relative;
-      .ani-container {
+      // background-color: green;
+      margin-right: 15px;
+      .anime-container {
+        flex-basis: 80%;
         height: 100%;
         width: 100%;
-        .anime-list-container {
-          height: 15%;
+        background-color: rgba($color: #fff, $alpha: 0.5);
+        backdrop-filter: blur(20px);
+        @include dropShadow();
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        // position: relative;
+        .ani-container {
+          height: 100%;
           width: 100%;
-          // flex-basis: 15%;
-          // flex: 1;
-          display: flex;
-          margin-bottom: 15px;
-          // border-right: 10px solid #008cff;
-          border-radius: 10px;
-          background-color: $accentColor;
-          flex-direction: column;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          justify-content: center;
-          padding: 0 20px;
-          cursor: pointer;
-          @include dropShadow();
-          p {
-            font-weight: 600;
-            color: $secondaryColor;
-          }
-          small {
-            color: $primaryColor;
+          // background-color: darkred;
+          .anime-list-container {
+            min-width: 0;
+            height: 20%;
+            width: 100%;
+            // flex-basis: 15%;
+            // flex: 1;
+            display: flex;
+            // background-color: darkmagenta;
+            margin-bottom: 15px;
+            // border-right: 10px solid #008cff;
+            border-radius: 10px;
+            background-color: $accentColor;
+            // flex-direction: column;
+            // justify-content: center;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            &:hover {
+              background-color: #fcfcfc;
+              .anime-delete-btn {
+                opacity: 1;
+              }
+            }
+            @include dropShadow();
+            .anime-title-container {
+              min-width: 0;
+              // background-color: darkslateblue;
+              flex: 4;
+              height: 100%;
+              width: 100%;
+              // background-color: green;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              padding: 0 20px;
+              p {
+                font-weight: 600;
+                color: $secondaryColor;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+              small {
+                color: $primaryColor;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+            .anime-delete-btn {
+              opacity: 0;
+              flex: 1;
+              height: 100%;
+              width: 100%;
+              // background-color: blue;
+              border-top-right-radius: 10px;
+              border-bottom-right-radius: 10px;
+              @include flexCenter();
+              svg {
+                fill: $secondaryColor;
+              }
+              &:hover {
+                background-color: $minAccentColor;
+              }
+            }
           }
         }
       }
-      .anime-input-btn {
-        height: 64px;
-        width: 64px;
-        border-radius: 50%;
-        background-color: $minAccentColor;
-        // position: absolute;
-        // bottom: 10;
+      .ani-input-container {
+        flex-basis: 20%;
+        height: 100%;
+        width: 100%;
+        // background-color: red;
+        background-color: rgba($color: #fff, $alpha: 0.5);
+        backdrop-filter: blur(20px);
+        @include dropShadow();
+        border-radius: 10px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.25s ease;
+        display: flex;
+        overflow: hidden;
+        flex-direction: column;
+        svg {
+          fill: $primaryColor;
+        }
+        @include flexCenter();
+        &:hover {
+          background-color: rgba($color: #fff, $alpha: 0.8);
+          // backdrop-filter: blur(1px);
+          @include dropShadow();
+        }
+        p {
+          font-weight: 500;
+          font-size: 1.2em;
+          // color: $secondaryColor;
+        }
       }
     }
     .list-content-thumbnail {
@@ -196,6 +266,41 @@
           background-color: rgba($color: #000, $alpha: 0.5);
           backdrop-filter: blur(8px);
           border-radius: 0 0 10px 10px;
+        }
+      }
+    }
+    .empty-anime-insert {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      // background-color: red;
+      @include flexCenter();
+      .empty-anime-container {
+        height: 100px;
+        width: 300px;
+        background-color: rgba($color: #fff, $alpha: 0.6);
+        backdrop-filter: blur(8px);
+        border-radius: 10px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.25s ease;
+        display: flex;
+        flex-direction: column;
+        svg {
+          fill: $primaryColor;
+        }
+        @include flexCenter();
+        &:hover {
+          background-color: rgba($color: #fff, $alpha: 0.8);
+          // backdrop-filter: blur(1px);
+          @include dropShadow();
+        }
+        p {
+          font-weight: 500;
+          font-size: 1.2em;
+          // color: $secondaryColor;
         }
       }
     }

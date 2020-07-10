@@ -1,14 +1,7 @@
 .settings-modal {
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba($color: black, $alpha: 0.5);
-  position: absolute;
-  opacity: 0;
-  transition: all 0.25s ease;
-  pointer-events: none;
-  backdrop-filter: blur(8px);
-  @include flexCenter();
+  @include modalOverlay();
   .settings-dialog {
+    opacity: 0;
     width: 600px;
     height: 600px;
     // background-color: $accentColor;
@@ -71,6 +64,72 @@
             background-color: $minAccentColor;
           }
         }
+      }
+    }
+  }
+  .delete-dialog {
+    opacity: 0;
+    height: 150px;
+    width: 400px;
+    background-color: $minAccentColor;
+    position: absolute;
+    pointer-events: none;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    p {
+      font-weight: 500;
+    }
+    .delete-message {
+      // background-color: blueviolet;
+      height: 100%;
+      width: 100%;
+      flex: 2;
+      color: $secondaryColor;
+      text-align: center;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      padding: 15px;
+      @include flexCenter();
+      border-bottom: 1px solid $primaryColor;
+    }
+    .delete-confirm {
+      flex: 1;
+      height: 100%;
+      width: 100%;
+      // background-color: blue;
+      display: flex;
+      .confirm-yes {
+        flex: 1;
+        height: 100%;
+        width: 100%;
+        // background-color: brown;
+        border-bottom-left-radius: 10px;
+        // border-right: 0.25px solid $primaryColor;
+        @include flexCenter();
+        p {
+          color: rgb(255, 88, 88);
+        }
+        &:hover {
+          background-color: #bdbdbd;
+        }
+        cursor: pointer;
+      }
+      .confirm-no {
+        flex: 1;
+        height: 100%;
+        width: 100%;
+        // background-color: cadetblue;
+        border-bottom-right-radius: 10px;
+        border-left: 0.25px solid $primaryColor;
+        @include flexCenter();
+        p {
+          color: $primaryColor;
+        }
+        &:hover {
+          background-color: #bdbdbd;
+        }
+        cursor: pointer;
       }
     }
   }
