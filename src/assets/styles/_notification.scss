@@ -1,0 +1,40 @@
+.notification {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  //   top: 0;
+  //   background-color: red;
+  pointer-events: none;
+  .notification-container {
+    height: 100px;
+    width: 400px;
+    // background-color: red;
+    opacity: 0;
+    background-color: rgba($color: #fff, $alpha: 0.8);
+    backdrop-filter: blur(20px);
+    @include dropShadow();
+    overflow: hidden;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    border-radius: 20px;
+    position: absolute;
+    top: 80%;
+    right: 5%;
+    cursor: pointer;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    p {
+      color: $secondaryColor;
+    }
+    h3 {
+      font-weight: 500;
+      font-style: italic;
+      color: $secondaryColor;
+      span {
+        color: $primaryColor;
+      }
+    }
+  }
+}

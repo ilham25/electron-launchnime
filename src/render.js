@@ -8,6 +8,7 @@ const ls = require("local-storage");
 const fileUrl = require("file-url");
 const { set } = require("local-storage");
 const { dir } = require("console");
+const { title } = require("process");
 
 // Etc Variables
 let dirData;
@@ -78,6 +79,11 @@ const deleteNo = document.querySelector(".confirm-no");
 // Component
 const wpContainer = document.querySelector(".content");
 
+// Custom notification
+const notifContainer = document.querySelector(".notification-container");
+const notifMessage = document.querySelector(
+  ".notification-container .notification-message"
+);
 // Input anime
 const inputAnimeModal = document.querySelector(".input-anime-modal");
 const inputAnimeTitle = document.querySelector(".anime-form-title");
@@ -208,6 +214,29 @@ const wpDebug = () => {
   wpContainer.style.backgroundImage = `url("file:///${path.normalize(
     "D:\68041c3351e8eb088c671c7dcbd41295.jpg"
   )}")`;
+};
+
+// Custom notification control
+
+const custNotif = (title, flag) => {
+  notifContainer.style.opacity = 1;
+  notifContainer.style.pointerEvents = "all";
+  switch (flag) {
+    case "insert":
+      notifMessage.innerText = `'${title}' added successfully!`;
+      break;
+    case "delete":
+      notifMessage.innerText = `'${title}' deleted successfully!`;
+      break;
+    default:
+      break;
+  }
+  // notifContainer.style.backgroundColor = "rgba(255,255,255,0.5)";
+  setTimeout(() => {
+    notifContainer.style.opacity = 0;
+    notifContainer.style.pointerEvents = "none";
+    notifMessage.innerText = "-";
+  }, 5000);
 };
 // Change Wallpaper Function
 const changeWallpaper = (picParam) => {
@@ -425,6 +454,7 @@ const createAnimeList = () => {
     componentDisplay("emptyContainer", false);
     listWpContainer.setAttribute("data-directory", animeData[0].directory);
     listWpContainer.setAttribute("data-thumbnail", animeData[0].thumbnail);
+
     // console.log("cok", fileUrl(animeData[0].thumbnail));
 
     wpContainer.style.backgroundImage = `url("${fileUrl(
@@ -440,6 +470,7 @@ const createAnimeList = () => {
     const domAnimeList = document.createElement("div");
     domAnimeList.classList.add("anime-list-container");
     domAnimeList.setAttribute("data-directory", anime.directory);
+    domAnimeList.setAttribute("title", anime.title);
     listAniFile(anime.directory, "sum");
     fs.readdir(anime.directory, (err, files) => {
       domAnimeList.innerHTML = ` 
@@ -542,10 +573,13 @@ settingsModal.addEventListener("click", (e) => {
 deleteYes.addEventListener("click", () => {
   const { animeData } = appData;
   const deleteIndex = deleteDialog.getAttribute("data-index");
+  const deleteTitle = animeData[deleteIndex].title;
   animeData.splice(deleteIndex, 1);
   ls.set("appData", appData);
   createAnimeList();
   settingsModal.classList.toggle("active");
+  custNotif(deleteTitle, "delete");
+  lastAddedCheck();
   componentDisplay("deleteDialog", false);
 });
 deleteNo.addEventListener("click", () => {
@@ -592,6 +626,10 @@ inputBtn.addEventListener("click", () => {
     inputAnimeModal.classList.toggle("active");
     createAnimeList();
     clearInputForm();
+    // const myNotification = new Notification("LaunchNime", {
+    //   body: `'${title}' added successfully!`,
+    // });
+    custNotif(title, "insert");
   }
 });
 
@@ -623,7 +661,7 @@ minimizeBtn.addEventListener("click", () => {
 
 lastWatched.addEventListener("click", () => {
   console.log("last watched clicked!");
-  resetData();
+  // resetData();
 });
 
 lastAdded.addEventListener("click", () => {
@@ -643,10 +681,19 @@ btnHistory.addEventListener("click", () => {
   pageRouter("history");
 });
 
+notifContainer.addEventListener("click", () => {
+  console.log("notif click");
+  notifContainer.style.opacity = 0;
+  notifContainer.style.pointerEvents = "none";
+  notifMessage.innerText = "-";
+});
+
 // Key Event
 document.body.addEventListener("keydown", (e) => {
   if (e.key == "Escape") {
     settingsModal.classList.remove("active");
+  }
+  if (e.key == "F11") {
   }
 });
 
