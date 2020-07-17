@@ -1,7 +1,7 @@
 // All Variables
 
 // Import Section
-const { remote, app } = require("electron");
+const { remote } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const ls = require("local-storage");
@@ -93,50 +93,23 @@ const inputAnimeThumbnail = document.querySelector(".form-thumbnail");
 const textThumbnail = document.querySelector(".anime-form-thumbnail");
 const inputBtn = document.querySelector(".form-input-btn");
 
-// All Function
+// Play Anime
+const playAnimeWp = document.querySelector(".play-anime");
+const playBackBtn = document.querySelector(".play-back-btn");
 
-// lol
-// {
-//   title: "Plastic Memories",
-//   directory:
-//     "loremaowkoakwokawoekaowkeaiwjeaweapweokawpeokawepawokeapwoekapweokawpeokawpeokawpeokawepk",
-//   thumbnail: `E:\\Ilham\\Wallpapers\\SoGa.jpg`,
-// },
+// const playTitle = document.querySelector(
+//   ".play-content .episode-list .header .header-title"
+// );
 
-// Creating dummy object
-//
-// const appData = { animeData: [] };
-//
-// const appData = {
-//   animeData: [
-//     {
-//       title: "Bungou Stray Dogs",
-//       directory: `E:\\Ilham\\Wallpapers\\`,
-//       thumbnail: `E:\\Ilham\\Wallpapers\\Noerulb-Nakajima-Atsushi.png`,
-//     },
-//     {
-//       title: "Re Zero",
-//       directory: `E:\\Ilham\\Wallpapers\\`,
-//       thumbnail: `E:\\Ilham\\Wallpapers\\REM PC -CSMS.jpg`,
-//     },
-//     {
-//       title: "Saenai Heroine no Sodatekata",
-//       directory: "dir4",
-//       thumbnail: `E:\\Ilham\\Wallpapers\\SAEKANO PC -CSMS.jpg`,
-//     },
-//     {
-//       title: "Nisekoi",
-//       directory: "dir5",
-//       thumbnail: `E:\\Ilham\\Wallpapers\\TEAMCHITOGE PC.jpg`,
-//     },
-//     {
-//       title: "Kyoukai no Kanata Movie : I'll be Here aowoawkoawkoawk",
-//       directory: "dir6",
-//       thumbnail:
-//         "E:\\Ilham\\Wallpapers\\[KORIGENGI-FAKHRI] Mirai - I'll Be Here.png",
-//     },
-//   ],
-// };
+const playListContainer = document.querySelector(".series-episode");
+const videoPlayer = document.querySelector("#my-video");
+const videoContainer = document.querySelector(".episode-player");
+
+const episodeText = document.querySelector(".episode-description h1");
+const episodeTitle = document.querySelector(".episode-description p");
+
+const aniTitle = document.querySelector(".series-header h2");
+const aniEpisode = document.querySelector(".series-header h4");
 
 // Get Anime Directory
 const getAnimeDirectory = () => {
@@ -236,7 +209,7 @@ const custNotif = (title, flag) => {
     notifContainer.style.opacity = 0;
     notifContainer.style.pointerEvents = "none";
     notifMessage.innerText = "-";
-  }, 5000);
+  }, 3000);
 };
 // Change Wallpaper Function
 const changeWallpaper = (picParam) => {
@@ -362,12 +335,12 @@ const componentDisplay = (flag, display) => {
     case "lastAddedOverlay":
       if (display == true) {
         lastAddedOverlay.addEventListener("mouseenter", (e) => {
-          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.5)";
+          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.2)";
         });
         lastAddedOverlay.addEventListener("mouseleave", () => {
-          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.8)";
+          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.5)";
         });
-        lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.8)";
+        lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.5)";
         lastPict.style.opacity = 1;
       } else {
         lastAddedOverlay.addEventListener("mouseenter", (e) => {
@@ -381,6 +354,15 @@ const componentDisplay = (flag, display) => {
         lastPict.style.opacity = 0;
       }
       break;
+    case "playAnimeWp":
+      if (display == true) {
+        playAnimeWp.style.opacity = 1;
+        playAnimeWp.style.pointerEvents = "all";
+      } else {
+        playAnimeWp.style.opacity = 0;
+        playAnimeWp.style.pointerEvents = "none";
+      }
+      break;
     default:
       break;
   }
@@ -392,6 +374,10 @@ const lastAddedCheck = () => {
   if (animeData.length == 0) {
     console.log("animeData kosong");
     componentDisplay("lastAddedOverlay", false);
+    lastAdded.removeAttribute("data-directory");
+    lastAdded.removeAttribute("data-title");
+    lastAdded.removeAttribute("data-thumbnail");
+    console.log("yl", lastAdded.getAttribute("data-directory"));
     lastTitle.innerText = "No anime available";
     lastTotalEpisode.innerText = "-";
   } else {
@@ -401,8 +387,26 @@ const lastAddedCheck = () => {
     console.log(lastIndex);
     lastPict.src = animeData[lastIndex].thumbnail;
     lastTitle.innerText = animeData[lastIndex].title;
+    lastAdded.setAttribute("data-directory", animeData[lastIndex].directory);
+    lastAdded.setAttribute("data-title", animeData[lastIndex].title);
+    lastAdded.setAttribute("data-thumbnail", animeData[lastIndex].thumbnail);
     fs.readdir(animeData[lastIndex].directory, (err, files) => {
-      lastTotalEpisode.innerText = `Total Episode : ${files.length}`;
+      const filterFile = [];
+      files.forEach((file) => {
+        const fileExtensions = file.split(".").pop();
+        if (
+          fileExtensions == "mp4" ||
+          fileExtensions == "mkv" ||
+          fileExtensions == "flv" ||
+          fileExtensions == "3gp" ||
+          fileExtensions == "mov" ||
+          fileExtensions == "wmv" ||
+          fileExtensions == "avi"
+        ) {
+          filterFile.push(file);
+        }
+      });
+      lastTotalEpisode.innerText = `Total Episode : ${filterFile.length}`;
     });
   }
 };
@@ -454,6 +458,7 @@ const createAnimeList = () => {
     componentDisplay("emptyContainer", false);
     listWpContainer.setAttribute("data-directory", animeData[0].directory);
     listWpContainer.setAttribute("data-thumbnail", animeData[0].thumbnail);
+    listWpContainer.setAttribute("data-title", animeData[0].title);
 
     // console.log("cok", fileUrl(animeData[0].thumbnail));
 
@@ -463,7 +468,22 @@ const createAnimeList = () => {
     listWpThumbnail.src = animeData[0].thumbnail;
     listWpTitle.innerText = animeData[0].title;
     fs.readdir(animeData[0].directory, (err, files) => {
-      listWpEpisode.innerText = `Total Episode : ${files.length}`;
+      const filterFile = [];
+      files.forEach((file) => {
+        const fileExtensions = file.split(".").pop();
+        if (
+          fileExtensions == "mp4" ||
+          fileExtensions == "mkv" ||
+          fileExtensions == "flv" ||
+          fileExtensions == "3gp" ||
+          fileExtensions == "mov" ||
+          fileExtensions == "wmv" ||
+          fileExtensions == "avi"
+        ) {
+          filterFile.push(file);
+        }
+      });
+      listWpEpisode.innerText = `Total Episode : ${filterFile.length}`;
     });
   }
   appData.animeData.forEach((anime, index) => {
@@ -473,17 +493,33 @@ const createAnimeList = () => {
     domAnimeList.setAttribute("title", anime.title);
     listAniFile(anime.directory, "sum");
     fs.readdir(anime.directory, (err, files) => {
+      const filterFile = [];
+      files.forEach((file) => {
+        const fileExtensions = file.split(".").pop();
+        if (
+          fileExtensions == "mp4" ||
+          fileExtensions == "mkv" ||
+          fileExtensions == "flv" ||
+          fileExtensions == "3gp" ||
+          fileExtensions == "mov" ||
+          fileExtensions == "wmv" ||
+          fileExtensions == "avi"
+        ) {
+          filterFile.push(file);
+        }
+      });
       domAnimeList.innerHTML = ` 
       <div class="anime-title-container">
         <!-- <div class="title-child"> -->
           <p>${anime.title}</p>
-          <small>Total Episode : ${files.length}</small>
+          <small>Total Episode : ${filterFile.length}</small>
         <!-- </div> -->
       </div>`;
     });
 
     domAnimeList.addEventListener("click", () => {
       console.log(index);
+      listWpContainer.setAttribute("data-title", anime.title);
       listWpContainer.setAttribute("data-directory", anime.directory);
       listWpContainer.setAttribute("data-thumbnail", anime.thumbnail);
       listWpContainer.style.opacity = 0;
@@ -492,7 +528,22 @@ const createAnimeList = () => {
         listWpThumbnail.src = anime.thumbnail;
         listWpTitle.innerText = anime.title;
         fs.readdir(anime.directory, (err, files) => {
-          listWpEpisode.innerText = `Total Episode : ${files.length}`;
+          const filterFile = [];
+          files.forEach((file) => {
+            const fileExtensions = file.split(".").pop();
+            if (
+              fileExtensions == "mp4" ||
+              fileExtensions == "mkv" ||
+              fileExtensions == "flv" ||
+              fileExtensions == "3gp" ||
+              fileExtensions == "mov" ||
+              fileExtensions == "wmv" ||
+              fileExtensions == "avi"
+            ) {
+              filterFile.push(file);
+            }
+          });
+          listWpEpisode.innerText = `Total Episode : ${filterFile.length}`;
         });
         listWpContainer.style.opacity = 1;
       }, 300);
@@ -510,6 +561,52 @@ const createAnimeList = () => {
   });
 };
 
+const createEpisodeList = (dir, title) => {
+  playListContainer.innerHTML = "";
+  aniTitle.innerText = title;
+  fs.readdir(dir, (err, files) => {
+    // console.log(files);
+
+    const filterFile = [];
+    files.forEach((file, index) => {
+      // console.log(file.split(".").pop());
+      const fileExtensions = file.split(".").pop();
+      if (
+        fileExtensions == "mp4" ||
+        fileExtensions == "mkv" ||
+        fileExtensions == "flv" ||
+        fileExtensions == "3gp" ||
+        fileExtensions == "mov" ||
+        fileExtensions == "wmv" ||
+        fileExtensions == "avi"
+      ) {
+        filterFile.push(file);
+      }
+    });
+    videoPlayer.src = fileUrl(`${dir}\\${filterFile[0]}`);
+    episodeText.innerText = `Episode 1`;
+    aniEpisode.innerText = `Total Episode : ${filterFile.length}`;
+    filterFile.forEach((file, index) => {
+      const domEpisodeList = document.createElement("div");
+      domEpisodeList.classList.add("eps");
+      domEpisodeList.setAttribute("title", file);
+      domEpisodeList.setAttribute("data-title", `Episode ${index + 1}`);
+      domEpisodeList.setAttribute("data-file", `${dir}\\${file}`);
+      domEpisodeList.innerHTML = `
+    <div class="eps-title">
+      <p>Episode ${index + 1}</p>
+      <small>${title}</small>
+    </div>`;
+      episodeTitle.innerText = title;
+      domEpisodeList.addEventListener("click", () => {
+        const fileDir = domEpisodeList.getAttribute("data-file");
+        videoPlayer.src = fileUrl(fileDir);
+        episodeText.innerText = `Episode ${index + 1}`;
+      });
+      playListContainer.appendChild(domEpisodeList);
+    });
+  });
+};
 const resetData = () => {
   const { animeData } = appData;
   animeData.splice(0, animeData.length);
@@ -548,6 +645,10 @@ const dataCheck = () => {
   }
 };
 const startUp = () => {
+  console.log(window.innerHeight);
+  console.log(window.innerWidth);
+  videoPlayer.setAttribute("width", videoContainer.clientWidth);
+  videoPlayer.setAttribute("heigh", videoContainer.clientHeight);
   dataCheck();
   lastAddedCheck();
   wpCheck();
@@ -643,10 +744,15 @@ wpDefault.addEventListener("click", () => {
 });
 
 listWpContainer.addEventListener("click", () => {
+  const title = listWpContainer.getAttribute("data-title");
   const thumbnail = listWpContainer.getAttribute("data-thumbnail");
   const directory = listWpContainer.getAttribute("data-directory");
   wpContainer.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
-  listAniFile(directory, "list");
+  // listAniFile(directory, "list");
+  playAnimeWp.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
+  console.log(title);
+  createEpisodeList(directory, title);
+  componentDisplay("playAnimeWp", true);
 });
 
 closeBtn.addEventListener("click", () => {
@@ -665,6 +771,15 @@ lastWatched.addEventListener("click", () => {
 });
 
 lastAdded.addEventListener("click", () => {
+  const title = lastAdded.getAttribute("data-title");
+  const thumbnail = lastAdded.getAttribute("data-thumbnail");
+  const directory = lastAdded.getAttribute("data-directory");
+
+  if (title !== null || thumbnail !== null || directory !== null) {
+    playAnimeWp.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
+    componentDisplay("playAnimeWp", true);
+    createEpisodeList(directory, title);
+  }
   console.log("last added clicked!");
 });
 
@@ -688,10 +803,20 @@ notifContainer.addEventListener("click", () => {
   notifMessage.innerText = "-";
 });
 
+playBackBtn.addEventListener("click", () => {
+  componentDisplay("playAnimeWp", false);
+  playListContainer.innerHTML = ``;
+  aniTitle.innerText = "";
+  aniEpisode.innerText = "";
+  episodeTitle.innerText = "";
+  episodeText.innerText = "";
+  videoPlayer.src = "./assets/videojs/dummy.mp4";
+});
 // Key Event
 document.body.addEventListener("keydown", (e) => {
   if (e.key == "Escape") {
     settingsModal.classList.remove("active");
+    componentDisplay("settingsDialog", false);
   }
   if (e.key == "F11") {
   }

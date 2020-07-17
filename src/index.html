@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="./assets/styles/style.css" />
+    <link href="./assets/videojs/video-js.css" rel="stylesheet" />
+
     <title>LaunchNime</title>
   </head>
   <body>
@@ -107,11 +109,7 @@
             <div class="list-container">
               <div class="anime-container">
                 <div class="ani-container">
-                  <div
-                    class="anime-list-container"
-                    data-directory="D:\nimu\plasmemo"
-                    onclick="console.log('mantap gan')"
-                  >
+                  <div class="anime-list-container" data-directory="">
                     <div class="anime-title-container">
                       <div class="title-child">
                         <p>
@@ -358,8 +356,65 @@
           </p>
         </div>
       </div>
+      <div class="play-anime">
+        <div class="blur-overlay">
+          <div class="container">
+            <div class="play-header">
+              <div class="play-back">
+                <div class="play-back-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="black"
+                    width="40px"
+                    height="40px"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="play-content">
+              <div class="series-list">
+                <div class="series-header">
+                  <h2>ANIME TITLE</h2>
+                  <h4>ANIME TOTAL EPISODE</h4>
+                </div>
+                <div class="series-episode">
+                  <div class="eps">
+                    <div class="eps-title">
+                      <p>EPISODE TEXT</p>
+                      <small>TITLE TEXT</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="series-player">
+                <div class="episode-player">
+                  <video
+                    id="my-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    data-setup="{}"
+                  >
+                    <source src="./assets/videojs/dummy.mp4" type="video/mp4" />
+                  </video>
+                </div>
+                <div class="episode-description">
+                  <h1>EPISODE TEXT</h1>
+                  <p>TITLE TEXT</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <script src="./assets/videojs/video.js"></script>
     <script src="./render.js"></script>
-    <!-- <script src="./assets/js/app.js"></script> -->
   </body>
 </html>

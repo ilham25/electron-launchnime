@@ -17,6 +17,10 @@
   scroll-behavior: smooth;
   user-select: none;
 }
+html,
+body {
+  height: 100vh;
+}
 
 body {
   overflow: hidden;
@@ -47,6 +51,7 @@ body {
   @include flexColumn();
   position: absolute;
 }
+
 // Import components
 @import "./header-content";
 
@@ -59,3 +64,5 @@ body {
 @import "./input-anime-modal";
 
 @import "./notification";
+
+@import "./play-anime";

@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, screen } = require("electron");
 const path = require("path");
+const { electron } = require("process");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -8,21 +9,46 @@ if (require("electron-squirrel-startup")) {
 }
 
 const createWindow = () => {
+  const mainScreen = screen.getPrimaryDisplay();
+  const dimension = mainScreen.size;
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 768,
+    width: dimension.width,
+    height: dimension.height,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      devTools: false,
+      devTools: true,
     },
+    resizable: false,
     frame: false,
+    show: false,
   });
   mainWindow.setFullScreen(true);
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));
+
+  const splash = new BrowserWindow({
+    width: 400,
+    height: 400,
+    resizable: false,
+    frame: false,
+    alwaysOnTop: true,
+    transparent: true,
+  });
+
+  splash.loadFile(path.join(__dirname, "splash.html"));
+
+  mainWindow.once("ready-to-show", () => {
+    setTimeout(() => {
+      splash.destroy();
+      setTimeout(() => {
+        mainWindow.show();
+      }, 200);
+    }, 2000);
+  });
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();

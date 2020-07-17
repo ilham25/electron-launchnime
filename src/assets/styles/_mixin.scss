@@ -21,6 +21,12 @@
   background-size: cover;
 }
 
+@mixin wpContainer() {
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+}
+
 @mixin modalOverlay() {
   height: 100vh;
   width: 100vw;
@@ -31,4 +37,9 @@
   pointer-events: none;
   backdrop-filter: blur(8px);
   @include flexCenter();
+}
+
+@mixin compOverlay($param) {
+  background-color: rgba($color: #fff, $alpha: $param);
+  backdrop-filter: blur(20px);
 }
