@@ -189,6 +189,41 @@ const wpDebug = () => {
   )}")`;
 };
 
+// Get Episode Length
+const getAnimeEpisode = (dir, param, callback) => {
+  const filterFile = [];
+  fs.readdir(dir, (err, files) => {
+    files.forEach((file) => {
+      const fileExtensions = file.split(".").pop();
+      if (
+        fileExtensions == "mp4" ||
+        fileExtensions == "mkv" ||
+        fileExtensions == "flv" ||
+        fileExtensions == "3gp" ||
+        fileExtensions == "mov" ||
+        fileExtensions == "wmv" ||
+        fileExtensions == "avi"
+      ) {
+        filterFile.push(file);
+      }
+    });
+    switch (param) {
+      case "length":
+        callback(filterFile.length);
+        break;
+      case "firstItem":
+        callback(filterFile[0]);
+        break;
+      case "allItem":
+        callback(filterFile);
+        break;
+
+      default:
+        break;
+    }
+  });
+};
+
 // Custom notification control
 
 const custNotif = (title, flag) => {
@@ -370,43 +405,23 @@ const componentDisplay = (flag, display) => {
 
 const lastAddedCheck = () => {
   const { animeData } = appData;
-  console.log(animeData);
   if (animeData.length == 0) {
-    console.log("animeData kosong");
     componentDisplay("lastAddedOverlay", false);
     lastAdded.removeAttribute("data-directory");
     lastAdded.removeAttribute("data-title");
     lastAdded.removeAttribute("data-thumbnail");
-    console.log("yl", lastAdded.getAttribute("data-directory"));
     lastTitle.innerText = "No anime available";
     lastTotalEpisode.innerText = "-";
   } else {
-    console.log("animeData terisi");
     componentDisplay("lastAddedOverlay", true);
     const lastIndex = animeData.length - 1;
-    console.log(lastIndex);
     lastPict.src = animeData[lastIndex].thumbnail;
     lastTitle.innerText = animeData[lastIndex].title;
     lastAdded.setAttribute("data-directory", animeData[lastIndex].directory);
     lastAdded.setAttribute("data-title", animeData[lastIndex].title);
     lastAdded.setAttribute("data-thumbnail", animeData[lastIndex].thumbnail);
-    fs.readdir(animeData[lastIndex].directory, (err, files) => {
-      const filterFile = [];
-      files.forEach((file) => {
-        const fileExtensions = file.split(".").pop();
-        if (
-          fileExtensions == "mp4" ||
-          fileExtensions == "mkv" ||
-          fileExtensions == "flv" ||
-          fileExtensions == "3gp" ||
-          fileExtensions == "mov" ||
-          fileExtensions == "wmv" ||
-          fileExtensions == "avi"
-        ) {
-          filterFile.push(file);
-        }
-      });
-      lastTotalEpisode.innerText = `Total Episode : ${filterFile.length}`;
+    getAnimeEpisode(animeData[lastIndex].directory, "length", (value) => {
+      lastTotalEpisode.innerText = `Total Episode : ${value}`;
     });
   }
 };
@@ -467,56 +482,25 @@ const createAnimeList = () => {
     )}")`;
     listWpThumbnail.src = animeData[0].thumbnail;
     listWpTitle.innerText = animeData[0].title;
-    fs.readdir(animeData[0].directory, (err, files) => {
-      const filterFile = [];
-      files.forEach((file) => {
-        const fileExtensions = file.split(".").pop();
-        if (
-          fileExtensions == "mp4" ||
-          fileExtensions == "mkv" ||
-          fileExtensions == "flv" ||
-          fileExtensions == "3gp" ||
-          fileExtensions == "mov" ||
-          fileExtensions == "wmv" ||
-          fileExtensions == "avi"
-        ) {
-          filterFile.push(file);
-        }
-      });
-      listWpEpisode.innerText = `Total Episode : ${filterFile.length}`;
+    getAnimeEpisode(animeData[0].directory, "length", (value) => {
+      listWpEpisode.innerText = `Total Episode : ${value}`;
     });
   }
-  appData.animeData.forEach((anime, index) => {
+  animeData.forEach((anime, index) => {
     const domAnimeList = document.createElement("div");
     domAnimeList.classList.add("anime-list-container");
     domAnimeList.setAttribute("data-directory", anime.directory);
     domAnimeList.setAttribute("title", anime.title);
     listAniFile(anime.directory, "sum");
-    fs.readdir(anime.directory, (err, files) => {
-      const filterFile = [];
-      files.forEach((file) => {
-        const fileExtensions = file.split(".").pop();
-        if (
-          fileExtensions == "mp4" ||
-          fileExtensions == "mkv" ||
-          fileExtensions == "flv" ||
-          fileExtensions == "3gp" ||
-          fileExtensions == "mov" ||
-          fileExtensions == "wmv" ||
-          fileExtensions == "avi"
-        ) {
-          filterFile.push(file);
-        }
-      });
+    getAnimeEpisode(anime.directory, "length", (value) => {
       domAnimeList.innerHTML = ` 
-      <div class="anime-title-container">
-        <!-- <div class="title-child"> -->
-          <p>${anime.title}</p>
-          <small>Total Episode : ${filterFile.length}</small>
-        <!-- </div> -->
-      </div>`;
+        <div class="anime-title-container">
+          <!-- <div class="title-child"> -->
+            <p>${anime.title}</p>
+            <small>Total Episode : ${value}</small>
+          <!-- </div> -->
+        </div>`;
     });
-
     domAnimeList.addEventListener("click", () => {
       console.log(index);
       listWpContainer.setAttribute("data-title", anime.title);
@@ -527,23 +511,8 @@ const createAnimeList = () => {
       setTimeout(() => {
         listWpThumbnail.src = anime.thumbnail;
         listWpTitle.innerText = anime.title;
-        fs.readdir(anime.directory, (err, files) => {
-          const filterFile = [];
-          files.forEach((file) => {
-            const fileExtensions = file.split(".").pop();
-            if (
-              fileExtensions == "mp4" ||
-              fileExtensions == "mkv" ||
-              fileExtensions == "flv" ||
-              fileExtensions == "3gp" ||
-              fileExtensions == "mov" ||
-              fileExtensions == "wmv" ||
-              fileExtensions == "avi"
-            ) {
-              filterFile.push(file);
-            }
-          });
-          listWpEpisode.innerText = `Total Episode : ${filterFile.length}`;
+        getAnimeEpisode(anime.directory, "length", (value) => {
+          listWpEpisode.innerText = `Total Episode : ${value}`;
         });
         listWpContainer.style.opacity = 1;
       }, 300);
@@ -567,43 +536,33 @@ const createEpisodeList = (dir, title) => {
   fs.readdir(dir, (err, files) => {
     // console.log(files);
 
-    const filterFile = [];
-    files.forEach((file, index) => {
-      // console.log(file.split(".").pop());
-      const fileExtensions = file.split(".").pop();
-      if (
-        fileExtensions == "mp4" ||
-        fileExtensions == "mkv" ||
-        fileExtensions == "flv" ||
-        fileExtensions == "3gp" ||
-        fileExtensions == "mov" ||
-        fileExtensions == "wmv" ||
-        fileExtensions == "avi"
-      ) {
-        filterFile.push(file);
-      }
+    getAnimeEpisode(dir, "firstItem", (value) => {
+      videoPlayer.src = fileUrl(`${dir}\\${value}`);
     });
-    videoPlayer.src = fileUrl(`${dir}\\${filterFile[0]}`);
     episodeText.innerText = `Episode 1`;
-    aniEpisode.innerText = `Total Episode : ${filterFile.length}`;
-    filterFile.forEach((file, index) => {
-      const domEpisodeList = document.createElement("div");
-      domEpisodeList.classList.add("eps");
-      domEpisodeList.setAttribute("title", file);
-      domEpisodeList.setAttribute("data-title", `Episode ${index + 1}`);
-      domEpisodeList.setAttribute("data-file", `${dir}\\${file}`);
-      domEpisodeList.innerHTML = `
-    <div class="eps-title">
-      <p>Episode ${index + 1}</p>
-      <small>${title}</small>
-    </div>`;
-      episodeTitle.innerText = title;
-      domEpisodeList.addEventListener("click", () => {
-        const fileDir = domEpisodeList.getAttribute("data-file");
-        videoPlayer.src = fileUrl(fileDir);
-        episodeText.innerText = `Episode ${index + 1}`;
+    getAnimeEpisode(dir, "length", (value) => {
+      aniEpisode.innerText = `Total Episode : ${value}`;
+    });
+    getAnimeEpisode(dir, "allItem", (value) => {
+      value.forEach((file, index) => {
+        const domEpisodeList = document.createElement("div");
+        domEpisodeList.classList.add("eps");
+        domEpisodeList.setAttribute("title", file);
+        domEpisodeList.setAttribute("data-title", `Episode ${index + 1}`);
+        domEpisodeList.setAttribute("data-file", `${dir}\\${file}`);
+        domEpisodeList.innerHTML = `
+          <div class="eps-title">
+            <p>Episode ${index + 1}</p>
+            <small>${title}</small>
+          </div>`;
+        episodeTitle.innerText = title;
+        domEpisodeList.addEventListener("click", () => {
+          const fileDir = domEpisodeList.getAttribute("data-file");
+          videoPlayer.src = fileUrl(fileDir);
+          episodeText.innerText = `Episode ${index + 1}`;
+        });
+        playListContainer.appendChild(domEpisodeList);
       });
-      playListContainer.appendChild(domEpisodeList);
     });
   });
 };
@@ -825,6 +784,7 @@ document.body.addEventListener("keydown", (e) => {
 // Etc
 
 // Run startup function
+
 startUp();
 
 // Debugging only

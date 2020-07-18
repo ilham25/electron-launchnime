@@ -32,7 +32,7 @@
         height: 100%;
         // background-color: hotpink;
         .play-back {
-          width: 120px;
+          width: 100px;
           height: 70px;
           border-radius: 500px;
           backdrop-filter: blur(8px);
@@ -80,6 +80,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            overflow: hidden;
             h2 {
               font-weight: 600;
             }
@@ -149,7 +150,8 @@
           grid-template-rows: 80% 20%;
           .episode-player {
             // background-color: magenta;
-            @include compOverlay(0.8);
+            // @include compOverlay(0.8);
+            background-color: black;
             margin-bottom: 15px;
             border-radius: 10px;
             overflow: hidden;
@@ -157,6 +159,9 @@
             video {
               min-width: 100%;
               border-radius: 10px;
+              &:focus {
+                outline-width: 0;
+              }
             }
           }
           .episode-description {

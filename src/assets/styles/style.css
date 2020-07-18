@@ -1281,7 +1281,7 @@ body {
 }
 
 .play-anime .blur-overlay .container .play-header .play-back {
-  width: 120px;
+  width: 100px;
   height: 70px;
   border-radius: 500px;
   -webkit-backdrop-filter: blur(8px);
@@ -1361,6 +1361,7 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  overflow: hidden;
 }
 
 .play-anime .blur-overlay .container .play-content .series-list .series-header h2 {
@@ -1454,9 +1455,7 @@ body {
 }
 
 .play-anime .blur-overlay .container .play-content .series-player .episode-player {
-  background-color: rgba(255, 255, 255, 0.8);
-  -webkit-backdrop-filter: blur(20px);
-          backdrop-filter: blur(20px);
+  background-color: black;
   margin-bottom: 15px;
   border-radius: 10px;
   overflow: hidden;
@@ -1465,6 +1464,10 @@ body {
 .play-anime .blur-overlay .container .play-content .series-player .episode-player video {
   min-width: 100%;
   border-radius: 10px;
+}
+
+.play-anime .blur-overlay .container .play-content .series-player .episode-player video:focus {
+  outline-width: 0;
 }
 
 .play-anime .blur-overlay .container .play-content .series-player .episode-description {
