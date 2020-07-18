@@ -97,10 +97,6 @@ const inputBtn = document.querySelector(".form-input-btn");
 const playAnimeWp = document.querySelector(".play-anime");
 const playBackBtn = document.querySelector(".play-back-btn");
 
-// const playTitle = document.querySelector(
-//   ".play-content .episode-list .header .header-title"
-// );
-
 const playListContainer = document.querySelector(".series-episode");
 const videoPlayer = document.querySelector("#my-video");
 const videoContainer = document.querySelector(".episode-player");
@@ -118,46 +114,11 @@ const getAnimeDirectory = () => {
   };
 
   let folderPath = dialog.showOpenDialog(options);
-  //   console.log("folderConsole", folderPath);
-
   folderPath.then((value) => {
     //   Get the selected directory
-    console.log("selectedDirectory : ", fileUrl(value.filePaths[0]));
-    // dirData = fileUrl(value.filePaths[0]);
     dirData = value.filePaths[0];
     textDirectory.innerText = dirData;
-    // Get all files from selected directory
-    // fs.readdir(value.filePaths[0], (err, files) => {
-    // console.log(value.filePaths[0]);
-    // files from selected directory in array
-    // console.log(files);
-
-    // Loop the entire files array in selectedDirectory
-
-    //   files.forEach((file) => {
-    //     console.log(file);
-    //   });
-    // });
   });
-};
-
-const listAniFile = (value, param) => {
-  fs.readdir(value, (err, files) => {
-    // fileList = files;
-    switch (param) {
-      case "list":
-        console.log(files);
-
-        break;
-      case "sum":
-        // fileSumData = files.length;
-        break;
-      default:
-        break;
-    }
-    // console.log(files);
-  });
-  // return fileList;
 };
 
 // Check custom wallpaper
@@ -178,15 +139,6 @@ const wpCheck = () => {
 const resetWp = () => {
   ls.remove("wpData");
   wpContainer.style.backgroundImage = `url("./assets/img/wp.jpg")`;
-  // wpContainer.style.backgroundImage = `url("${encodeURI(
-  //   "E:IlhamWallpapers\10-13.jpg"
-  // )}")`;
-};
-
-const wpDebug = () => {
-  wpContainer.style.backgroundImage = `url("file:///${path.normalize(
-    "D:\68041c3351e8eb088c671c7dcbd41295.jpg"
-  )}")`;
 };
 
 // Get Episode Length
@@ -239,7 +191,6 @@ const custNotif = (title, flag) => {
     default:
       break;
   }
-  // notifContainer.style.backgroundColor = "rgba(255,255,255,0.5)";
   setTimeout(() => {
     notifContainer.style.opacity = 0;
     notifContainer.style.pointerEvents = "none";
@@ -260,7 +211,6 @@ const changeWallpaper = (picParam) => {
       return value.filePaths[0];
     } else {
       if (picParam === "change") {
-        console.log("platform windows change wp ");
         ls.set("wpData", value.filePaths[0]);
         wpContainer.style.backgroundImage = `url('${fileUrl(
           ls.get("wpData")
@@ -467,16 +417,12 @@ const createAnimeList = () => {
   const { animeData } = appData;
   if (appData.animeData.length == 0) {
     wpCheck();
-    console.log("listEmpty");
     componentDisplay("emptyContainer", true);
   } else {
     componentDisplay("emptyContainer", false);
     listWpContainer.setAttribute("data-directory", animeData[0].directory);
     listWpContainer.setAttribute("data-thumbnail", animeData[0].thumbnail);
     listWpContainer.setAttribute("data-title", animeData[0].title);
-
-    // console.log("cok", fileUrl(animeData[0].thumbnail));
-
     wpContainer.style.backgroundImage = `url("${fileUrl(
       animeData[0].thumbnail
     )}")`;
@@ -491,7 +437,7 @@ const createAnimeList = () => {
     domAnimeList.classList.add("anime-list-container");
     domAnimeList.setAttribute("data-directory", anime.directory);
     domAnimeList.setAttribute("title", anime.title);
-    listAniFile(anime.directory, "sum");
+
     getAnimeEpisode(anime.directory, "length", (value) => {
       domAnimeList.innerHTML = ` 
         <div class="anime-title-container">
@@ -502,7 +448,6 @@ const createAnimeList = () => {
         </div>`;
     });
     domAnimeList.addEventListener("click", () => {
-      console.log(index);
       listWpContainer.setAttribute("data-title", anime.title);
       listWpContainer.setAttribute("data-directory", anime.directory);
       listWpContainer.setAttribute("data-thumbnail", anime.thumbnail);
@@ -517,8 +462,8 @@ const createAnimeList = () => {
         listWpContainer.style.opacity = 1;
       }, 300);
     });
+
     domAnimeList.addEventListener("contextmenu", () => {
-      console.log("click kanan animelist : ", anime.title);
       deleteDialog.setAttribute("data-index", index);
       settingsModal.classList.toggle("active");
       componentDisplay("deleteDialog", true);
@@ -526,43 +471,38 @@ const createAnimeList = () => {
     });
 
     listContainer.appendChild(domAnimeList);
-    // console.log("anime foreach loop : ", anime.directory);
   });
 };
 
 const createEpisodeList = (dir, title) => {
   playListContainer.innerHTML = "";
   aniTitle.innerText = title;
-  fs.readdir(dir, (err, files) => {
-    // console.log(files);
-
-    getAnimeEpisode(dir, "firstItem", (value) => {
-      videoPlayer.src = fileUrl(`${dir}\\${value}`);
-    });
-    episodeText.innerText = `Episode 1`;
-    getAnimeEpisode(dir, "length", (value) => {
-      aniEpisode.innerText = `Total Episode : ${value}`;
-    });
-    getAnimeEpisode(dir, "allItem", (value) => {
-      value.forEach((file, index) => {
-        const domEpisodeList = document.createElement("div");
-        domEpisodeList.classList.add("eps");
-        domEpisodeList.setAttribute("title", file);
-        domEpisodeList.setAttribute("data-title", `Episode ${index + 1}`);
-        domEpisodeList.setAttribute("data-file", `${dir}\\${file}`);
-        domEpisodeList.innerHTML = `
+  getAnimeEpisode(dir, "firstItem", (value) => {
+    videoPlayer.src = fileUrl(`${dir}\\${value}`);
+  });
+  episodeText.innerText = `Episode 1`;
+  getAnimeEpisode(dir, "length", (value) => {
+    aniEpisode.innerText = `Total Episode : ${value}`;
+  });
+  getAnimeEpisode(dir, "allItem", (value) => {
+    value.forEach((file, index) => {
+      const domEpisodeList = document.createElement("div");
+      domEpisodeList.classList.add("eps");
+      domEpisodeList.setAttribute("title", file);
+      domEpisodeList.setAttribute("data-title", `Episode ${index + 1}`);
+      domEpisodeList.setAttribute("data-file", `${dir}\\${file}`);
+      domEpisodeList.innerHTML = `
           <div class="eps-title">
             <p>Episode ${index + 1}</p>
             <small>${title}</small>
           </div>`;
-        episodeTitle.innerText = title;
-        domEpisodeList.addEventListener("click", () => {
-          const fileDir = domEpisodeList.getAttribute("data-file");
-          videoPlayer.src = fileUrl(fileDir);
-          episodeText.innerText = `Episode ${index + 1}`;
-        });
-        playListContainer.appendChild(domEpisodeList);
+      episodeTitle.innerText = title;
+      domEpisodeList.addEventListener("click", () => {
+        const fileDir = domEpisodeList.getAttribute("data-file");
+        videoPlayer.src = fileUrl(fileDir);
+        episodeText.innerText = `Episode ${index + 1}`;
       });
+      playListContainer.appendChild(domEpisodeList);
     });
   });
 };
@@ -583,7 +523,6 @@ const insertAnime = (title, directory, thumbnail) => {
   };
   animeData.push(newAnimeData);
   ls.set("appData", appData);
-  console.log(appData);
 };
 
 const clearInputForm = () => {
@@ -596,16 +535,12 @@ const clearInputForm = () => {
 
 const dataCheck = () => {
   if (appData == null) {
-    console.log("data kosong");
     const dummyData = { animeData: [] };
     ls.set("appData", dummyData);
     appData = ls.get("appData");
-    console.log("data masuk", appData);
   }
 };
 const startUp = () => {
-  console.log(window.innerHeight);
-  console.log(window.innerWidth);
   videoPlayer.setAttribute("width", videoContainer.clientWidth);
   videoPlayer.setAttribute("heigh", videoContainer.clientHeight);
   dataCheck();
@@ -643,7 +578,6 @@ deleteYes.addEventListener("click", () => {
   componentDisplay("deleteDialog", false);
 });
 deleteNo.addEventListener("click", () => {
-  console.log("delete no");
   settingsModal.classList.toggle("active");
   componentDisplay("deleteDialog", false);
 });
@@ -686,9 +620,6 @@ inputBtn.addEventListener("click", () => {
     inputAnimeModal.classList.toggle("active");
     createAnimeList();
     clearInputForm();
-    // const myNotification = new Notification("LaunchNime", {
-    //   body: `'${title}' added successfully!`,
-    // });
     custNotif(title, "insert");
   }
 });
@@ -707,27 +638,20 @@ listWpContainer.addEventListener("click", () => {
   const thumbnail = listWpContainer.getAttribute("data-thumbnail");
   const directory = listWpContainer.getAttribute("data-directory");
   wpContainer.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
-  // listAniFile(directory, "list");
   playAnimeWp.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
-  console.log(title);
   createEpisodeList(directory, title);
   componentDisplay("playAnimeWp", true);
 });
 
 closeBtn.addEventListener("click", () => {
-  console.log("close button");
   w.close();
 });
 
 minimizeBtn.addEventListener("click", () => {
-  console.log("minimize button");
   w.minimize();
 });
 
-lastWatched.addEventListener("click", () => {
-  console.log("last watched clicked!");
-  // resetData();
-});
+lastWatched.addEventListener("click", () => {});
 
 lastAdded.addEventListener("click", () => {
   const title = lastAdded.getAttribute("data-title");
@@ -739,7 +663,6 @@ lastAdded.addEventListener("click", () => {
     componentDisplay("playAnimeWp", true);
     createEpisodeList(directory, title);
   }
-  console.log("last added clicked!");
 });
 
 btnList.addEventListener("click", () => {
@@ -756,7 +679,6 @@ btnHistory.addEventListener("click", () => {
 });
 
 notifContainer.addEventListener("click", () => {
-  console.log("notif click");
   notifContainer.style.opacity = 0;
   notifContainer.style.pointerEvents = "none";
   notifMessage.innerText = "-";
@@ -771,6 +693,7 @@ playBackBtn.addEventListener("click", () => {
   episodeText.innerText = "";
   videoPlayer.src = "./assets/videojs/dummy.mp4";
 });
+
 // Key Event
 document.body.addEventListener("keydown", (e) => {
   if (e.key == "Escape") {
@@ -784,7 +707,6 @@ document.body.addEventListener("keydown", (e) => {
 // Etc
 
 // Run startup function
-
 startUp();
 
 // Debugging only
