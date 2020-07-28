@@ -19,36 +19,36 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      devTools: false,
+      devTools: true,
     },
     resizable: false,
     frame: false,
-    show: false,
+    show: true,
   });
   mainWindow.setFullScreen(true);
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 
-  const splash = new BrowserWindow({
-    width: 400,
-    height: 400,
-    resizable: false,
-    frame: false,
-    alwaysOnTop: true,
-    transparent: true,
-  });
+  // const splash = new BrowserWindow({
+  //   width: 400,
+  //   height: 400,
+  //   resizable: false,
+  //   frame: false,
+  //   alwaysOnTop: true,
+  //   transparent: true,
+  // });
 
-  splash.loadFile(path.join(__dirname, "splash.html"));
+  // splash.loadFile(path.join(__dirname, "splash.html"));
 
-  mainWindow.once("ready-to-show", () => {
-    setTimeout(() => {
-      splash.destroy();
-      setTimeout(() => {
-        mainWindow.show();
-      }, 200);
-    }, 2000);
-  });
+  // mainWindow.once("ready-to-show", () => {
+  //   setTimeout(() => {
+  //     splash.destroy();
+  //     setTimeout(() => {
+  //       mainWindow.show();
+  //     }, 200);
+  //   }, 2000);
+  // });
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
@@ -75,6 +75,7 @@ app.on("activate", () => {
     createWindow();
   }
 });
+app.commandLine.appendSwitch("ignore-gpu-blacklist");
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

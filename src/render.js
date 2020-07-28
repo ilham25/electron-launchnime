@@ -11,8 +11,6 @@ const { dir } = require("console");
 const { title } = require("process");
 
 // Etc Variables
-let dirData;
-let thumbData;
 dialog = remote.dialog;
 const w = remote.getCurrentWindow();
 let appData = ls.get("appData");
@@ -98,7 +96,7 @@ const playAnimeWp = document.querySelector(".play-anime");
 const playBackBtn = document.querySelector(".play-back-btn");
 
 const playListContainer = document.querySelector(".series-episode");
-const videoPlayer = document.querySelector("#my-video");
+const videoPlayer = document.querySelector("#player");
 const videoContainer = document.querySelector(".episode-player");
 
 const episodeText = document.querySelector(".episode-description h1");
@@ -108,18 +106,29 @@ const aniTitle = document.querySelector(".series-header h2");
 const aniEpisode = document.querySelector(".series-header h4");
 
 // Get Anime Directory
-const getAnimeDirectory = () => {
-  let options = {
-    properties: ["openDirectory"],
-  };
 
-  let folderPath = dialog.showOpenDialog(options);
-  folderPath.then((value) => {
-    //   Get the selected directory
-    dirData = value.filePaths[0];
-    textDirectory.innerText = dirData;
+function AniDir() {
+  let dir;
+  this.getDirectory = () => {
+    let options = {
+      properties: ["openDirectory"],
+    };
+    let folderPath = dialog.showOpenDialog(options);
+    folderPath.then((value) => {
+      //   Get the selected directory
+      dir = value.filePaths[0];
+      textDirectory.innerText = dir;
+    });
+  };
+  Object.defineProperty(this, "dir", {
+    get: () => {
+      return dir;
+    },
+    set: (value) => {
+      if (value == undefined) dir = value;
+    },
   });
-};
+}
 
 // Check custom wallpaper
 const wpCheck = () => {
@@ -178,192 +187,223 @@ const getAnimeEpisode = (dir, param, callback) => {
 
 // Custom notification control
 
-const custNotif = (title, flag) => {
-  notifContainer.style.opacity = 1;
-  notifContainer.style.pointerEvents = "all";
-  switch (flag) {
-    case "insert":
-      notifMessage.innerText = `'${title}' added successfully!`;
-      break;
-    case "delete":
-      notifMessage.innerText = `'${title}' deleted successfully!`;
-      break;
-    default:
-      break;
-  }
-  setTimeout(() => {
-    notifContainer.style.opacity = 0;
-    notifContainer.style.pointerEvents = "none";
-    notifMessage.innerText = "-";
-  }, 3000);
-};
+function AniNotif() {
+  const displayNotif = () => {
+    notifContainer.style.opacity = 1;
+    notifContainer.style.pointerEvents = "all";
+  };
+
+  const hideNotif = () => {
+    setTimeout(() => {
+      notifContainer.style.opacity = 0;
+      notifContainer.style.pointerEvents = "none";
+      notifMessage.innerText = "-";
+    }, 3000);
+  };
+
+  this.insertNotif = (title) => {
+    displayNotif();
+    notifMessage.innerText = `'${title}' added successfully!`;
+    hideNotif();
+  };
+  this.deleteNotif = (title) => {
+    displayNotif();
+    notifMessage.innerText = `'${title}' deleted successfully!`;
+    hideNotif();
+  };
+}
+
 // Change Wallpaper Function
-const changeWallpaper = (picParam) => {
+
+function AniWp() {
+  let wpData;
   let options = {
     properties: ["openFile"],
     title: "Pick Image",
     filters: [{ name: "Images", extensions: ["jpg", "png", "gif", "bmp"] }],
   };
-  let filePath = dialog.showOpenDialog(options);
-  filePath.then((value) => {
-    if (value.filePaths[0] == undefined) {
-      wpCheck();
-      return value.filePaths[0];
-    } else {
-      if (picParam === "change") {
+  this.change = () => {
+    let filePath = dialog.showOpenDialog(options);
+
+    filePath.then((value) => {
+      if (value.filePaths[0] == undefined) {
+        wpCheck();
+        return value.filePaths[0];
+      } else {
         ls.set("wpData", value.filePaths[0]);
         wpContainer.style.backgroundImage = `url('${fileUrl(
           ls.get("wpData")
         )}')`;
-      } else if (picParam === "browse") {
-        thumbData = value.filePaths[0];
+      }
+    });
+  };
+  this.browse = () => {
+    let filePath = dialog.showOpenDialog(options);
+    filePath.then((value) => {
+      if (value.filePaths[0] == undefined) {
+        wpCheck();
+        return value.filePaths[0];
+      } else {
+        wpData = value.filePaths[0];
         textThumbnail.innerText = value.filePaths[0];
       }
-    }
+    });
+  };
+  Object.defineProperty(this, "wpData", {
+    get: () => {
+      return wpData;
+    },
+    set: (value) => {
+      if (value == undefined) wpData = value;
+    },
   });
-};
+}
 
-const componentDisplay = (flag, display) => {
-  switch (flag) {
-    case "emptyContainer":
-      if (display == true) {
-        listWpContainer.style.opacity = 0;
-        listWpContainer.style.pointerEvents = "none";
-        containerList.style.opacity = 0;
-        containerList.style.pointerEvents = "none";
-        emptyContainer.style.opacity = 1;
-        emptyContainer.style.pointerEvents = "all";
-      } else {
-        emptyContainer.style.opacity = 0;
-        emptyContainer.style.pointerEvents = "none";
-        listWpContainer.style.opacity = 1;
-        listWpContainer.style.pointerEvents = "all";
-        containerList.style.opacity = 1;
-        containerList.style.pointerEvents = "all";
-      }
-      break;
-    case "settingsDialog":
-      if (display == true) {
-        settingsDialog.style.pointerEvents = "all";
-        settingsDialog.style.opacity = 1;
-        deleteDialog.style.opacity = 0;
-        deleteDialog.style.pointerEvents = "none";
-      } else {
-        deleteDialog.style.pointerEvents = "none";
-        settingsDialog.style.pointerEvents = "none";
-      }
-      break;
-    case "deleteDialog":
-      if (display == true) {
-        settingsDialog.style.opacity = 0;
-        settingsDialog.style.pointerEvents = "none";
-        deleteDialog.style.opacity = 1;
-        deleteDialog.style.pointerEvents = "all";
-      } else {
-        deleteDialog.style.pointerEvents = "none";
-        settingsDialog.style.pointerEvents = "none";
-      }
-      break;
-    case "home":
-      if (display == true) {
-        homeContent.style.opacity = 1;
-        homeContent.style.pointerEvents = "all";
-      } else {
-        homeContent.style.opacity = 0;
-        homeContent.style.pointerEvents = "none";
-      }
-      break;
-    case "list":
-      if (display == true) {
-        listContent.style.opacity = 1;
-        listContent.style.pointerEvents = "all";
-      } else {
-        listContent.style.opacity = 0;
-        listContent.style.pointerEvents = "none";
-        listWpContainer.style.pointerEvents = "none";
-        containerList.style.opacity = 0;
-        containerList.style.pointerEvents = "none";
-        emptyContainer.style.opacity = 0;
-        emptyContainer.style.pointerEvents = "none";
-      }
-      break;
-    case "history":
-      if (display == true) {
-        historyContent.style.opacity = 1;
-        historyContent.style.pointerEvents = "all";
-      } else {
-        historyContent.style.opacity = 0;
-        historyContent.style.pointerEvents = "none";
-      }
-      break;
-    case "dockHome":
-      if (display == true) {
-        btnList.classList.remove("active");
-        btnHistory.classList.remove("active");
-        btnHome.classList.add("active");
-      }
-      break;
-    case "dockList":
-      if (display == true) {
-        btnHome.classList.remove("active");
-        btnHistory.classList.remove("active");
-        btnList.classList.add("active");
-      }
-      break;
-    case "dockHistory":
-      if (display == true) {
-        btnHome.classList.remove("active");
-        btnList.classList.remove("active");
-        btnHistory.classList.add("active");
-      }
-      break;
-    case "lastAddedOverlay":
-      if (display == true) {
-        lastAddedOverlay.addEventListener("mouseenter", (e) => {
-          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.2)";
-        });
-        lastAddedOverlay.addEventListener("mouseleave", () => {
-          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.5)";
-        });
+function AniCompDisplay() {
+  this.emptyContainer = (display) => {
+    if (display == true) {
+      listWpContainer.style.opacity = 0;
+      listWpContainer.style.pointerEvents = "none";
+      containerList.style.opacity = 0;
+      containerList.style.pointerEvents = "none";
+      emptyContainer.style.display = "flex";
+      emptyContainer.style.opacity = 1;
+      emptyContainer.style.pointerEvents = "all";
+    } else {
+      emptyContainer.style.opacity = 0;
+      emptyContainer.style.pointerEvents = "none";
+      emptyContainer.style.display = "none";
+      listWpContainer.style.opacity = 1;
+      listWpContainer.style.pointerEvents = "all";
+      containerList.style.opacity = 1;
+      containerList.style.pointerEvents = "all";
+    }
+  };
+  this.settingsDialog = (display) => {
+    if (display == true) {
+      settingsDialog.style.display = "flex";
+      settingsDialog.style.pointerEvents = "all";
+      settingsDialog.style.opacity = 1;
+      deleteDialog.style.opacity = 0;
+      deleteDialog.style.pointerEvents = "none";
+    } else {
+      deleteDialog.style.pointerEvents = "none";
+      deleteDialog.style.display = "none";
+      settingsDialog.style.pointerEvents = "none";
+      settingsDialog.style.display = "none";
+    }
+  };
+  this.deleteDialog = (display) => {
+    if (display == true) {
+      settingsDialog.style.opacity = 0;
+      settingsDialog.style.pointerEvents = "none";
+      deleteDialog.style.display = "flex";
+      deleteDialog.style.opacity = 1;
+      deleteDialog.style.pointerEvents = "all";
+    } else {
+      deleteDialog.style.pointerEvents = "none";
+      deleteDialog.style.display = "none";
+      settingsDialog.style.pointerEvents = "none";
+      settingsDialog.style.display = "none";
+    }
+  };
+  this.home = (display) => {
+    if (display == true) {
+      homeContent.style.opacity = 1;
+      homeContent.style.pointerEvents = "all";
+    } else {
+      homeContent.style.opacity = 0;
+      homeContent.style.pointerEvents = "none";
+    }
+  };
+  this.list = (display) => {
+    if (display == true) {
+      listContent.style.opacity = 1;
+      listContent.style.pointerEvents = "all";
+    } else {
+      listContent.style.opacity = 0;
+      listContent.style.pointerEvents = "none";
+      listWpContainer.style.pointerEvents = "none";
+      containerList.style.opacity = 0;
+      containerList.style.pointerEvents = "none";
+      emptyContainer.style.opacity = 0;
+      emptyContainer.style.pointerEvents = "none";
+    }
+  };
+  this.history = (display) => {
+    if (display == true) {
+      historyContent.style.opacity = 1;
+      historyContent.style.pointerEvents = "all";
+    } else {
+      historyContent.style.opacity = 0;
+      historyContent.style.pointerEvents = "none";
+    }
+  };
+  this.dockHome = (display) => {
+    if (display == true) {
+      btnList.classList.remove("active");
+      btnHistory.classList.remove("active");
+      btnHome.classList.add("active");
+    }
+  };
+  this.dockList = (display) => {
+    if (display == true) {
+      btnHome.classList.remove("active");
+      btnHistory.classList.remove("active");
+      btnList.classList.add("active");
+    }
+  };
+  this.dockHistory = (display) => {
+    if (display == true) {
+      btnHome.classList.remove("active");
+      btnList.classList.remove("active");
+      btnHistory.classList.add("active");
+    }
+  };
+  this.lastAddedOverlay = (display) => {
+    if (display == true) {
+      lastAddedOverlay.addEventListener("mouseenter", (e) => {
+        lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.2)";
+      });
+      lastAddedOverlay.addEventListener("mouseleave", () => {
         lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.5)";
-        lastPict.style.opacity = 1;
-      } else {
-        lastAddedOverlay.addEventListener("mouseenter", (e) => {
-          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.0)";
-        });
-        lastAddedOverlay.addEventListener("mouseleave", () => {
-          lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.0)";
-        });
-        // lastAddedContainer.style.boxShadow = 0;
-        lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0)";
-        lastPict.style.opacity = 0;
-      }
-      break;
-    case "playAnimeWp":
-      if (display == true) {
-        playAnimeWp.style.opacity = 1;
-        playAnimeWp.style.pointerEvents = "all";
-      } else {
-        playAnimeWp.style.opacity = 0;
-        playAnimeWp.style.pointerEvents = "none";
-      }
-      break;
-    default:
-      break;
-  }
-};
+      });
+      lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.5)";
+      lastPict.style.opacity = 1;
+    } else {
+      lastAddedOverlay.addEventListener("mouseenter", (e) => {
+        lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.0)";
+      });
+      lastAddedOverlay.addEventListener("mouseleave", () => {
+        lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0.0)";
+      });
+      // lastAddedContainer.style.boxShadow = 0;
+      lastAddedOverlay.style.backgroundColor = "rgba(0,0,0,0)";
+      lastPict.style.opacity = 0;
+    }
+  };
+  this.playAnimeWp = (display) => {
+    if (display == true) {
+      playAnimeWp.style.opacity = 1;
+      playAnimeWp.style.pointerEvents = "all";
+    } else {
+      playAnimeWp.style.opacity = 0;
+      playAnimeWp.style.pointerEvents = "none";
+    }
+  };
+}
 
 const lastAddedCheck = () => {
   const { animeData } = appData;
   if (animeData.length == 0) {
-    componentDisplay("lastAddedOverlay", false);
+    aniCompDisplay.lastAddedOverlay(false);
     lastAdded.removeAttribute("data-directory");
     lastAdded.removeAttribute("data-title");
     lastAdded.removeAttribute("data-thumbnail");
     lastTitle.innerText = "No anime available";
     lastTotalEpisode.innerText = "-";
   } else {
-    componentDisplay("lastAddedOverlay", true);
+    aniCompDisplay.lastAddedOverlay(true);
     const lastIndex = animeData.length - 1;
     lastPict.src = animeData[lastIndex].thumbnail;
     lastTitle.innerText = animeData[lastIndex].title;
@@ -376,162 +416,172 @@ const lastAddedCheck = () => {
   }
 };
 // Routing Home, List, History page
-const pageRouter = (btnName) => {
-  wpCheck();
-  switch (btnName) {
-    case "home":
-      // Button toggle
-      componentDisplay("dockHome", true);
-      // Page toggle
-      componentDisplay("home", true);
-      componentDisplay("list", false);
-      componentDisplay("history", false);
-      // etc
-      lastAddedCheck();
-      break;
-    case "list":
-      // Button toggle
-      componentDisplay("dockList", true);
-      // Page toggle
-      componentDisplay("home", false);
-      componentDisplay("history", false);
-      componentDisplay("list", true);
-      break;
-    case "history":
-      // Button toggle
-      componentDisplay("dockHistory", true);
-      // Page toggle
-      componentDisplay("home", false);
-      componentDisplay("list", false);
-      componentDisplay("history", true);
-      break;
 
-    default:
-      break;
-  }
-};
+function AniRouter() {
+  wpCheck();
+  this.home = () => {
+    // Button toggle
+    aniCompDisplay.dockHome(true);
+    // Page toggle
+
+    aniCompDisplay.home(true);
+    aniCompDisplay.list(false);
+    aniCompDisplay.history(false);
+    // etc
+    lastAddedCheck();
+  };
+  this.list = () => {
+    // Button toggle
+
+    aniCompDisplay.dockList(true);
+    // Page toggle
+
+    aniCompDisplay.home(false);
+    aniCompDisplay.history(false);
+    aniCompDisplay.list(true);
+  };
+  this.history = () => {
+    // Button toggle
+
+    aniCompDisplay.dockHistory(true);
+    // Page toggle
+
+    aniCompDisplay.home(false);
+    aniCompDisplay.list(false);
+    aniCompDisplay.history(true);
+  };
+}
 
 // Creating dynamic DOM
-const createAnimeList = () => {
-  listContainer.innerHTML = "";
-  const { animeData } = appData;
-  if (appData.animeData.length == 0) {
-    wpCheck();
-    componentDisplay("emptyContainer", true);
-  } else {
-    componentDisplay("emptyContainer", false);
-    listWpContainer.setAttribute("data-directory", animeData[0].directory);
-    listWpContainer.setAttribute("data-thumbnail", animeData[0].thumbnail);
-    listWpContainer.setAttribute("data-title", animeData[0].title);
-    wpContainer.style.backgroundImage = `url("${fileUrl(
-      animeData[0].thumbnail
-    )}")`;
-    listWpThumbnail.src = animeData[0].thumbnail;
-    listWpTitle.innerText = animeData[0].title;
-    getAnimeEpisode(animeData[0].directory, "length", (value) => {
-      listWpEpisode.innerText = `Total Episode : ${value}`;
-    });
-  }
-  animeData.forEach((anime, index) => {
-    const domAnimeList = document.createElement("div");
-    domAnimeList.classList.add("anime-list-container");
-    domAnimeList.setAttribute("data-directory", anime.directory);
-    domAnimeList.setAttribute("title", anime.title);
-
-    getAnimeEpisode(anime.directory, "length", (value) => {
-      domAnimeList.innerHTML = ` 
-        <div class="anime-title-container">
-          <!-- <div class="title-child"> -->
-            <p>${anime.title}</p>
-            <small>Total Episode : ${value}</small>
-          <!-- </div> -->
-        </div>`;
-    });
-    domAnimeList.addEventListener("click", () => {
-      listWpContainer.setAttribute("data-title", anime.title);
-      listWpContainer.setAttribute("data-directory", anime.directory);
-      listWpContainer.setAttribute("data-thumbnail", anime.thumbnail);
-      listWpContainer.style.opacity = 0;
-      wpContainer.style.backgroundImage = `url("${fileUrl(anime.thumbnail)}")`;
-      setTimeout(() => {
-        listWpThumbnail.src = anime.thumbnail;
-        listWpTitle.innerText = anime.title;
-        getAnimeEpisode(anime.directory, "length", (value) => {
-          listWpEpisode.innerText = `Total Episode : ${value}`;
-        });
-        listWpContainer.style.opacity = 1;
-      }, 300);
-    });
-
-    domAnimeList.addEventListener("contextmenu", () => {
-      deleteDialog.setAttribute("data-index", index);
-      settingsModal.classList.toggle("active");
-      componentDisplay("deleteDialog", true);
-      deleteMessage.innerText = `Are you sure want to delete '${anime.title}'?`;
-    });
-
-    listContainer.appendChild(domAnimeList);
-  });
-};
-
-const createEpisodeList = (dir, title) => {
-  playListContainer.innerHTML = "";
-  aniTitle.innerText = title;
-  getAnimeEpisode(dir, "firstItem", (value) => {
-    videoPlayer.src = fileUrl(`${dir}\\${value}`);
-  });
-  episodeText.innerText = `Episode 1`;
-  getAnimeEpisode(dir, "length", (value) => {
-    aniEpisode.innerText = `Total Episode : ${value}`;
-  });
-  getAnimeEpisode(dir, "allItem", (value) => {
-    value.forEach((file, index) => {
-      const domEpisodeList = document.createElement("div");
-      domEpisodeList.classList.add("eps");
-      domEpisodeList.setAttribute("title", file);
-      domEpisodeList.setAttribute("data-title", `Episode ${index + 1}`);
-      domEpisodeList.setAttribute("data-file", `${dir}\\${file}`);
-      domEpisodeList.innerHTML = `
-          <div class="eps-title">
-            <p>Episode ${index + 1}</p>
-            <small>${title}</small>
-          </div>`;
-      episodeTitle.innerText = title;
-      domEpisodeList.addEventListener("click", () => {
-        const fileDir = domEpisodeList.getAttribute("data-file");
-        videoPlayer.src = fileUrl(fileDir);
-        episodeText.innerText = `Episode ${index + 1}`;
+function AniCreator() {
+  this.aniList = () => {
+    listContainer.innerHTML = "";
+    const { animeData } = appData;
+    if (appData.animeData.length == 0) {
+      wpCheck();
+      aniCompDisplay.emptyContainer(true);
+    } else {
+      aniCompDisplay.emptyContainer(false);
+      listWpContainer.setAttribute("data-directory", animeData[0].directory);
+      listWpContainer.setAttribute("data-thumbnail", animeData[0].thumbnail);
+      listWpContainer.setAttribute("data-title", animeData[0].title);
+      wpContainer.style.backgroundImage = `url("${fileUrl(
+        animeData[0].thumbnail
+      )}")`;
+      listWpThumbnail.src = animeData[0].thumbnail;
+      listWpTitle.innerText = animeData[0].title;
+      getAnimeEpisode(animeData[0].directory, "length", (value) => {
+        listWpEpisode.innerText = `Total Episode : ${value}`;
       });
-      playListContainer.appendChild(domEpisodeList);
+    }
+    animeData.forEach((anime, index) => {
+      const domAnimeList = document.createElement("div");
+      domAnimeList.classList.add("anime-list-container");
+      domAnimeList.setAttribute("data-directory", anime.directory);
+      domAnimeList.setAttribute("title", anime.title);
+
+      getAnimeEpisode(anime.directory, "length", (value) => {
+        domAnimeList.innerHTML = ` 
+          <div class="anime-title-container">
+            <!-- <div class="title-child"> -->
+              <p>${anime.title}</p>
+              <small>Total Episode : ${value}</small>
+            <!-- </div> -->
+          </div>`;
+      });
+      domAnimeList.addEventListener("click", () => {
+        listWpContainer.setAttribute("data-title", anime.title);
+        listWpContainer.setAttribute("data-directory", anime.directory);
+        listWpContainer.setAttribute("data-thumbnail", anime.thumbnail);
+        listWpContainer.style.opacity = 0;
+        wpContainer.style.backgroundImage = `url("${fileUrl(
+          anime.thumbnail
+        )}")`;
+
+        // setTimeout(() => {
+
+        // }, 300);
+        listWpContainer.addEventListener("transitionend", () => {
+          listWpThumbnail.src = anime.thumbnail;
+          listWpTitle.innerText = anime.title;
+          getAnimeEpisode(anime.directory, "length", (value) => {
+            listWpEpisode.innerText = `Total Episode : ${value}`;
+          });
+          listWpContainer.style.opacity = 1;
+        });
+      });
+
+      domAnimeList.addEventListener("contextmenu", () => {
+        deleteDialog.setAttribute("data-index", index);
+        settingsModal.classList.toggle("active");
+        aniCompDisplay.deleteDialog(true);
+        deleteMessage.innerText = `Are you sure want to delete '${anime.title}'?`;
+      });
+
+      listContainer.appendChild(domAnimeList);
     });
-  });
-};
-const resetData = () => {
-  const { animeData } = appData;
-  animeData.splice(0, animeData.length);
-  // console.log(animeData);
-  createAnimeList();
-  emptyContainer.style.pointerEvents = "none";
-};
-
-const insertAnime = (title, directory, thumbnail) => {
-  const { animeData } = appData;
-  const newAnimeData = {
-    title: title,
-    directory: directory,
-    thumbnail: thumbnail,
   };
-  animeData.push(newAnimeData);
-  ls.set("appData", appData);
-};
+  this.aniEpisodeList = (dir, title) => {
+    playListContainer.innerHTML = "";
+    aniTitle.innerText = title;
+    getAnimeEpisode(dir, "firstItem", (value) => {
+      videoPlayer.src = fileUrl(`${dir}\\${value}`);
+    });
+    episodeText.innerText = `Episode 1`;
+    getAnimeEpisode(dir, "length", (value) => {
+      aniEpisode.innerText = `Total Episode : ${value}`;
+    });
+    getAnimeEpisode(dir, "allItem", (value) => {
+      value.forEach((file, index) => {
+        const domEpisodeList = document.createElement("div");
+        domEpisodeList.classList.add("eps");
+        domEpisodeList.setAttribute("title", file);
+        domEpisodeList.setAttribute("data-title", `Episode ${index + 1}`);
+        domEpisodeList.setAttribute("data-file", `${dir}\\${file}`);
+        domEpisodeList.innerHTML = `
+            <div class="eps-title">
+              <p>Episode ${index + 1}</p>
+              <small>${title}</small>
+            </div>`;
+        episodeTitle.innerText = title;
+        domEpisodeList.addEventListener("click", () => {
+          const fileDir = domEpisodeList.getAttribute("data-file");
+          videoPlayer.src = fileUrl(fileDir);
+          episodeText.innerText = `Episode ${index + 1}`;
+        });
+        playListContainer.appendChild(domEpisodeList);
+      });
+    });
+  };
+}
 
-const clearInputForm = () => {
-  thumbData = undefined;
-  dirData = undefined;
-  inputAnimeTitle.value = "";
-  textDirectory.innerText = "-";
-  textThumbnail.innerText = "-";
-};
+function AniForm() {
+  this.insert = (title, directory, thumbnail) => {
+    const { animeData } = appData;
+    const newAnimeData = {
+      title: title,
+      directory: directory,
+      thumbnail: thumbnail,
+    };
+    animeData.push(newAnimeData);
+    ls.set("appData", appData);
+  };
+  this.clear = () => {
+    aniWp.wpData = undefined;
+    aniDir.dir = undefined;
+    inputAnimeTitle.value = "";
+    textDirectory.innerText = "-";
+    textThumbnail.innerText = "-";
+  };
+}
+
+const aniDir = new AniDir();
+const aniNotif = new AniNotif();
+const aniWp = new AniWp();
+const aniCompDisplay = new AniCompDisplay();
+const aniRouter = new AniRouter();
+const aniCreator = new AniCreator();
+const aniForm = new AniForm();
 
 const dataCheck = () => {
   if (appData == null) {
@@ -540,6 +590,7 @@ const dataCheck = () => {
     appData = ls.get("appData");
   }
 };
+
 const startUp = () => {
   videoPlayer.setAttribute("width", videoContainer.clientWidth);
   videoPlayer.setAttribute("heigh", videoContainer.clientHeight);
@@ -553,14 +604,14 @@ const startUp = () => {
 
 settingsBtn.addEventListener("click", () => {
   settingsModal.classList.toggle("active");
-  componentDisplay("settingsDialog", true);
+  aniCompDisplay.settingsDialog(true);
 });
 
 settingsModal.addEventListener("click", (e) => {
   e.target.classList.forEach((element) => {
     if (element === "active") {
       settingsModal.classList.toggle("active");
-      componentDisplay("settingsDialog", false);
+      aniCompDisplay.settingsDialog(false);
     }
   });
 });
@@ -571,15 +622,15 @@ deleteYes.addEventListener("click", () => {
   const deleteTitle = animeData[deleteIndex].title;
   animeData.splice(deleteIndex, 1);
   ls.set("appData", appData);
-  createAnimeList();
+  aniCreator.aniList();
   settingsModal.classList.toggle("active");
-  custNotif(deleteTitle, "delete");
+  aniNotif.deleteNotif(deleteTitle);
   lastAddedCheck();
-  componentDisplay("deleteDialog", false);
+  aniCompDisplay.deleteDialog(false);
 });
 deleteNo.addEventListener("click", () => {
   settingsModal.classList.toggle("active");
-  componentDisplay("deleteDialog", false);
+  aniCompDisplay.deleteDialog(false);
 });
 emptyContainerBtn.addEventListener("click", () => {
   inputAnimeModal.classList.toggle("active");
@@ -591,41 +642,42 @@ aniInputContainer.addEventListener("click", () => {
 inputAnimeModal.addEventListener("click", (e) => {
   e.target.classList.forEach((element) => {
     if (element === "active") {
-      clearInputForm();
+      aniForm.clear();
       inputAnimeModal.classList.toggle("active");
     }
   });
 });
 
 inputAnimeDirectory.addEventListener("click", () => {
-  getAnimeDirectory();
+  aniDir.getDirectory();
   textDirectory.style.color = "#4d94ff";
 });
 inputAnimeThumbnail.addEventListener("click", () => {
-  changeWallpaper("browse");
+  aniWp.browse();
+
   textThumbnail.style.color = "#4d94ff";
 });
 inputBtn.addEventListener("click", () => {
   if (inputAnimeTitle.value == "") {
     alert("Insert title first");
-  } else if (dirData == undefined) {
+  } else if (aniDir.dir == undefined) {
     textDirectory.style.color = "red";
     textDirectory.innerText = "Insert directory";
-  } else if (thumbData == undefined) {
+  } else if (aniWp.wpData == undefined) {
     textThumbnail.style.color = "red";
     textThumbnail.innerText = "Insert thumbnail image";
   } else {
     const title = inputAnimeTitle.value;
-    insertAnime(title, dirData, thumbData);
+    aniForm.insert(title, aniDir.dir, aniWp.wpData);
     inputAnimeModal.classList.toggle("active");
-    createAnimeList();
-    clearInputForm();
-    custNotif(title, "insert");
+    aniCreator.aniList();
+    aniForm.clear();
+    aniNotif.insertNotif(title);
   }
 });
 
 wpChangeBtn.addEventListener("click", () => {
-  changeWallpaper("change");
+  aniWp.change();
   settingsDialog.style.pointerEvents = "none";
   settingsModal.classList.toggle("active");
 });
@@ -634,13 +686,14 @@ wpDefault.addEventListener("click", () => {
 });
 
 listWpContainer.addEventListener("click", () => {
+  console.log("cek");
   const title = listWpContainer.getAttribute("data-title");
   const thumbnail = listWpContainer.getAttribute("data-thumbnail");
   const directory = listWpContainer.getAttribute("data-directory");
   wpContainer.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
   playAnimeWp.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
-  createEpisodeList(directory, title);
-  componentDisplay("playAnimeWp", true);
+  aniCreator.aniEpisodeList(directory, title);
+  aniCompDisplay.playAnimeWp(true);
 });
 
 closeBtn.addEventListener("click", () => {
@@ -660,22 +713,22 @@ lastAdded.addEventListener("click", () => {
 
   if (title !== null || thumbnail !== null || directory !== null) {
     playAnimeWp.style.backgroundImage = `url("${fileUrl(thumbnail)}")`;
-    componentDisplay("playAnimeWp", true);
-    createEpisodeList(directory, title);
+    aniCompDisplay.playAnimeWp(true);
+    aniCreator.aniEpisodeList(directory, title);
   }
 });
 
 btnList.addEventListener("click", () => {
-  pageRouter("list");
-  createAnimeList();
+  aniRouter.list();
+  aniCreator.aniList();
 });
 
 btnHome.addEventListener("click", () => {
-  pageRouter("home");
+  aniRouter.home();
 });
 
 btnHistory.addEventListener("click", () => {
-  pageRouter("history");
+  aniRouter.history();
 });
 
 notifContainer.addEventListener("click", () => {
@@ -685,7 +738,7 @@ notifContainer.addEventListener("click", () => {
 });
 
 playBackBtn.addEventListener("click", () => {
-  componentDisplay("playAnimeWp", false);
+  aniCompDisplay.playAnimeWp(false);
   playListContainer.innerHTML = ``;
   aniTitle.innerText = "";
   aniEpisode.innerText = "";
@@ -698,7 +751,7 @@ playBackBtn.addEventListener("click", () => {
 document.body.addEventListener("keydown", (e) => {
   if (e.key == "Escape") {
     settingsModal.classList.remove("active");
-    componentDisplay("settingsDialog", false);
+    aniCompDisplay.settingsDialog(false);
   }
   if (e.key == "F11") {
   }

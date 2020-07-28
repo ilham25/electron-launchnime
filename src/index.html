@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="./assets/styles/style.css" />
-    <link href="./assets/videojs/video-js.css" rel="stylesheet" />
+    <!-- <link href="./assets/videojs/video-js.css" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="./assets/plyr/plyr.css" />
 
     <title>LaunchNime</title>
   </head>
@@ -81,7 +82,7 @@
           <div class="home-content">
             <div class="home-content-container">
               <div class="home-content-thumbnail last-added">
-                <img src="./assets/img/thumb1.jpg" alt="" />
+                <img src="" alt="" />
                 <div class="home-content-overlay">
                   <h1 class="last-added-title">Plastic Memories</h1>
                   <h2 class="last-added-episodes">13 Episodes</h2>
@@ -395,13 +396,12 @@
               <div class="series-player">
                 <div class="episode-player">
                   <video
-                    id="my-video"
-                    class="video-js"
+                    id="player"
+                    playsinline
                     controls
-                    preload="auto"
-                    data-setup="{}"
+                    data-poster="./assets/img/poster.png"
                   >
-                    <source src="./assets/videojs/dummy.mp4" type="video/mp4" />
+                    <source src="./assets/plyr/blank.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div class="episode-description">
@@ -414,7 +414,11 @@
         </div>
       </div>
     </div>
-    <script src="./assets/videojs/video.js"></script>
+    <script src="./assets/plyr/plyr.js"></script>
+    <script>
+      const player = new Plyr("#player");
+    </script>
+    <!-- <script src="./assets/videojs/video.js"></script> -->
     <script src="./render.js"></script>
   </body>
 </html>

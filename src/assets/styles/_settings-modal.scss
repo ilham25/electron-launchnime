@@ -97,15 +97,12 @@
       flex: 1;
       height: 100%;
       width: 100%;
-      // background-color: blue;
       display: flex;
       .confirm-yes {
         flex: 1;
         height: 100%;
         width: 100%;
-        // background-color: brown;
         border-bottom-left-radius: 10px;
-        // border-right: 0.25px solid $primaryColor;
         @include flexCenter();
         p {
           color: rgb(255, 88, 88);
@@ -119,7 +116,6 @@
         flex: 1;
         height: 100%;
         width: 100%;
-        // background-color: cadetblue;
         border-bottom-right-radius: 10px;
         border-left: 0.25px solid $primaryColor;
         @include flexCenter();

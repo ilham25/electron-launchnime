@@ -6,7 +6,6 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s ease;
-  // background-color: rebeccapurple;
 
   @include wpContainer();
   .blur-overlay {
